@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "polymer": "^2.0.1",
-    "iron-pages": "^2.0.0"
+    "iron-pages": "^2.0.0",
+    "paper-material": "PolymerElements/paper-material#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.1"
   }
 }

@@ -1,0 +1,61 @@
+<!--
+`<wine-search-facet-filter>` is Description
+
+@element WineSearchFacetFilter
+-->
+<dom-module id="wine-search-facet-filter">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <h2>[[label]]</h2>
+    <div>
+      <template is="dom-repeat" items="[[buckets]]">
+        <div><a>[[item.key]] ([[item.doc_count]])</a></div>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    class WineSearchFacetFilter extends AppBaseElement {
+
+      static get is() { return 'wine-search-facet-filter'; }
+
+      static get properties() {
+        return {
+          label : {
+            type : String,
+            value : ''
+          },
+          filter : {
+            type : String,
+            value : ''
+          },
+          buckets : {
+            type : Array,
+            value : []
+          }
+        };
+      }
+
+      get ebBind() {
+        return {
+          'search-request-update' : 'onSearchUpdate'
+        }
+      }
+
+      onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+        this.buckets = e.response.aggregations[this.filter].buckets;
+      }
+
+
+    }
+
+    window.customElements.define(WineSearchFacetFilter.is, WineSearchFacetFilter);
+  </script>
+</dom-module>

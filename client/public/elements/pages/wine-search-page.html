@@ -7,9 +7,42 @@
   <template>
     <style>
       :host {
-        display: block
+        display: block;
+      }
+
+      .root {
+        display : flex;
+      }
+
+      paper-material {
+        padding: 10px;
+        margin: 10px;
+      }
+
+      .content {
+        padding: 0 15px;
+        flex: 1;
       }
     </style>
+
+    <paper-input label="Seach"></paper-input>
+
+    <div class="root">
+      <div class="left">
+        <template is="dom-repeat" items="[[facetFilters]]">
+          <wine-search-facet-filter label$="[[item.label]]" filter$="[[item.filter]]"></wine-search-facet-filter>
+        </template>
+      </div>
+      <div class="content">
+        <div>Showing [[start]] to [[stop]] of [[total]]<div>
+
+        <template is="dom-repeat" items="[[results]]">
+          <paper-material>
+            <wine-search-result result="[[item]]"></wine-search-result>
+          </paper-material>
+        </template>
+      </div>
+    </div>
 
   </template>
 
@@ -20,7 +53,30 @@
 
       static get properties() {
         return {
-          
+          facetFilters : {
+            type : Array,
+            value : function() {
+              return [];
+            }
+          },
+          results : {
+            type : Array,
+            value : function() {
+              return [];
+            }
+          },
+          start : {
+            type : Number,
+            value : 0
+          },
+          stop : {
+            type : Number,
+            value : 0
+          },
+          total : {
+            type : Number,
+            value : 0
+          }
         };
       }
 
@@ -28,6 +84,19 @@
         return {
           'search-request-update' : 'onSearchUpdate'
         }
+      }
+
+      ready() {
+        super.ready();
+
+        var filters = [];
+        for( var key in App.config.facets ) {
+          filters.push({
+            label : App.config.facets[key],
+            filter : key
+          });
+        }
+        this.facetFilters = filters;
       }
 
       connectedCallback() {
@@ -42,7 +111,14 @@
       }
 
       onSearchUpdate(e) {
-        console.log(e);
+        if( e.state !== 'loaded' ) return;
+
+        this.start = e.body.from+1;
+        this.stop = e.body.size;
+        this.total = e.response.hits.total;
+
+        this.results = e.response.hits.hits.map((item) => item._source);
+        console.log(this.results);
       }
 
     }

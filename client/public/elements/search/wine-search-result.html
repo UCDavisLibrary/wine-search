@@ -1,0 +1,37 @@
+<!--
+`<wine-search-result>` is Description
+
+@element WineSearchResult
+-->
+<dom-module id="wine-search-result">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <h2>[[result.name]]</h2>
+
+  </template>
+
+  <script>
+    class WineSearchResult extends AppBaseElement {
+
+      static get is() { return 'wine-search-result'; }
+
+      static get properties() {
+        return {
+          result : {
+            type : Object,
+            value : function() {
+              return {};
+            }
+          }
+        };
+      }
+    }
+
+    window.customElements.define(WineSearchResult.is, WineSearchResult);
+  </script>
+</dom-module>

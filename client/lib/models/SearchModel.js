@@ -9,10 +9,14 @@ class SearchModel extends ReduxModel {
   search(body) {
     body.aggs = {};
 
+    if( !body.from ) body.from = 0;
+    if( !body.size ) body.size = body.from + 10;
+
     for( var key in config.facets ) {
       body.aggs[key] = {
         terms : { 
-          field : key
+          field : key,
+          size : config.maxFacetCount
         }
       }
     }
