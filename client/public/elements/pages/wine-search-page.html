@@ -1,0 +1,52 @@
+<!--
+`<wine-search-page>` is Description
+
+@element WineSearchPage
+-->
+<dom-module id="wine-search-page">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+  </template>
+
+  <script>
+    class WineSearchPage extends AppBaseElement {
+
+      static get is() { return 'wine-search-page'; }
+
+      static get properties() {
+        return {
+          
+        };
+      }
+
+      get ebBind() {
+        return {
+          'search-request-update' : 'onSearchUpdate'
+        }
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.search();
+      }
+
+      search() {
+        this.ebEmit('search-request', {
+          body : {}
+        });
+      }
+
+      onSearchUpdate(e) {
+        console.log(e);
+      }
+
+    }
+
+    window.customElements.define(WineSearchPage.is, WineSearchPage);
+  </script>
+</dom-module>

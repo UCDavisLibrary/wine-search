@@ -1,0 +1,48 @@
+<!--
+`<wine-search>` is Description
+
+@element WineSearch
+-->
+<dom-module id="wine-search">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <iron-pages selected-attribute="id" attr-for-selected="active">
+      <wine-search-page id="page"></wine-search-page>
+      <wine-search-landing id="search"></wine-search-landing>
+    </iron-pages>
+
+  </template>
+
+  <script>
+    class WineSearch extends Polymer.Element {
+
+      static get is() { return 'wine-search'; }
+
+      static get properties() {
+        return {
+          page : {
+            type : String,
+            value : 'search'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      ready() {
+        super.ready();
+
+      }
+
+    }
+
+    window.customElements.define(WineSearch.is, WineSearch);
+  </script>
+</dom-module>

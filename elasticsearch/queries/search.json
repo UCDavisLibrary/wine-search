@@ -1,4 +1,4 @@
-POST /test/_search
+// POST /wine-search/mark/_search
 {
   "from" : 0, 
   "size" : 100,

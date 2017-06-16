@@ -1,0 +1,21 @@
+{
+  "name": "wine-search",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Justin Merz <jrmerz@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/UCDavisLibrary/wine-search",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^2.0.1",
+    "iron-pages": "^2.0.0"
+  }
+}
