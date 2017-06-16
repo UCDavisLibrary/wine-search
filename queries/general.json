@@ -1,0 +1,18 @@
+POST /test/_search
+{
+  "from" : 0, 
+  "size" : 100,
+  "query": {
+    "range" : {
+        "vintage" : {
+            "gte" : 1960,
+            "lte" : 1969
+        }
+    }
+  },
+  "aggs" : {
+      "vintages" : {
+          "terms" : { "field" : "vintage" }
+      }
+  }
+}

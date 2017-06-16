@@ -1,0 +1,5 @@
+# shield.authc:
+#   anonymous:
+#     username: anonymous_user 
+#     # roles: role1, role2 
+#     authz_exception: true

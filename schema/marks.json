@@ -1,0 +1,103 @@
+{
+  "properties" : {
+    "mark_id" : {
+      "type" : "keyword"
+    },
+    "user_id" : {
+      "type" : "keyword"
+    },
+
+    "type" : {
+      "type" : "keyword"
+    },
+
+    "xy" : {
+      "type": "integer"
+    },
+    
+    "winetype" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+    
+    "color" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "country" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "name" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "producer" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "section" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "bottletype" : {
+      "type": "text",
+      "fields": {
+        "raw": { 
+          "type":  "keyword"
+        }
+      }
+    },
+
+    "vintage" : {
+      "type" : "integer"
+    },
+
+    "perprice" : {
+      "type" : "integer"
+    },
+
+    "caseprice" : {
+      "type" : "integer"
+    },
+
+    "created" : {
+      "type" : "date",
+      "format" : "date_optional_time"
+    },
+
+    "updated" : {
+      "type" : "date",
+      "format" : "date_optional_time"
+    }
+  }
+}
