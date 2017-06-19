@@ -18,12 +18,17 @@ class EventController {
         continue;
       }
 
-      this.eventBus.on(this.handle[fn].triggerEvent, (e) => {
-        var response = this[fn].call(this, e);
-        if( e.handler ) e.handler(response);
-      });
+      this._registerEvent(fn);
     }
   }
+
+  _registerEvent(fn) {
+    this.eventBus.on(this.handle[fn].triggerEvent, (e) => {
+      var response = this[fn].call(this, e);
+      if( e.handler ) e.handler(response);
+    });
+  }
+
 }
 
 module.exports = EventController;

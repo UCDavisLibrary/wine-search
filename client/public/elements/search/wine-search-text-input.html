@@ -1,0 +1,146 @@
+<!--
+`<wine-search-text-input>` is Description
+
+@element wine-search-text-input
+-->
+<dom-module id="wine-search-text-input">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <paper-input label="Search" on-keyup="_onKeyUp" on-blur="search" id="input"></paper-input>
+    <div>
+      <div hidden="[[!suggestions.length]]">Name Suggestions</div>
+      <template is="dom-repeat" items="[[suggestions]]">
+        <span style="margin-right: 25px"><a on-click="_useSuggestion">[[item]]</a></span>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    class WineSearchTextInput extends AppBaseElement {
+
+      static get is() { return 'wine-search-text-input'; }
+
+      static get properties() {
+        return {
+          suggestions : {
+            type : Array,
+            value : function() {
+              return [];
+            }
+          }
+        };
+      }
+
+      get SUGGEST_KEY() {
+        return 'name-suggest'
+      }
+
+      get ebBind() {
+        return {
+          'search-request-update' : 'onSearchUpdate'
+        }
+      }
+
+      _onKeyUp(e) {
+        if( e.which === 13 ) this.search();
+        else this.bufferSuggest();
+      }
+
+      search() {
+        this.ebEmit('text-search', {
+          text : this.$.input.value,
+          options : {
+            exec : true
+          }
+        });
+        this.$.input.value;
+      }
+
+      bufferSuggest() {
+        this._suggestDebouncer = Polymer.Debouncer.debounce(
+            this._suggestDebouncer, // initially undefined
+            Polymer.Async.timeOut.after(100),
+            this.suggest.bind(this)
+          );
+      }
+
+      _useSuggestion(e) {
+        var text = e.currentTarget.innerHTML;
+        var parts = this.$.input
+          .value
+          .split(' ')
+          .filter(val => val.length ? true : false);
+
+        parts[parts.length-1] = text;
+        this.$.input.value = parts.join(' ');
+        this._cancelSuggest();
+        this.search();
+      }
+
+      _cancelSuggest() {
+        this.suggestions = [];
+        this.ebEmit('remove-search-suggest', {
+          key : this.SUGGEST_KEY
+        });
+      }
+
+      suggest() {
+        var parts = this.$.input
+          .value
+          .split(' ')
+          .filter(val => val.length ? true : false);
+
+        if( parts.length === 0 ) {
+          this._cancelSuggest();
+          return;
+        }
+
+        var suggestOn = parts[parts.length-1];
+
+        if( suggestOn.length < 1 ) {
+          this._cancelSuggest();
+          return;
+        }
+
+        this.ebEmit('add-search-suggest', {
+          key : this.SUGGEST_KEY,
+          value : suggestOn,
+          exec : true
+        });
+      }
+
+      onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+
+        var resp = e.response;
+        this.suggestions = [];
+
+        if( !resp.suggest ) return;
+        if( !resp.suggest[this.SUGGEST_KEY] ) return;
+        if( !resp.suggest[this.SUGGEST_KEY][0] ) return;
+
+        var currentValue = e.body.suggest[this.SUGGEST_KEY].prefix.toLowerCase();
+        this.suggestions = resp
+                            .suggest[this.SUGGEST_KEY][0]
+                            .options
+                            .map((item) => item.text)
+                            .reduce((arr, val) => {
+                              if( arr.indexOf(val) === -1 && 
+                                  val.toLowerCase() !== currentValue ) {
+                                arr.push(val);
+                              } 
+                              return arr;
+                            }, []);
+      }
+
+    }
+
+    window.customElements.define(WineSearchTextInput.is, WineSearchTextInput);
+  </script>
+</dom-module>

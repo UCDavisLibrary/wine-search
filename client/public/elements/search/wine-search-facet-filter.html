@@ -9,12 +9,21 @@
       :host {
         display: block
       }
+
+      a {
+        cursor: pointer;
+      }
     </style>
 
     <h2>[[label]]</h2>
     <div>
+      <template is="dom-repeat" items="[[activeFilters]]">
+        <div><a on-click="removeFilter" index$="[[index]]">X [[item]]</a></div>
+      </template>
+    </div>
+    <div>
       <template is="dom-repeat" items="[[buckets]]">
-        <div><a>[[item.key]] ([[item.doc_count]])</a></div>
+        <div><a on-click="appendFilter" index$="[[index]]">[[item.key]] ([[item.doc_count]])</a></div>
       </template>
     </div>
 
@@ -38,6 +47,10 @@
           buckets : {
             type : Array,
             value : []
+          },
+          activeFilters : {
+            type : Array,
+            value : []
           }
         };
       }
@@ -51,6 +64,37 @@
       onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
         this.buckets = e.response.aggregations[this.filter].buckets;
+
+        var query = e.body.query;
+        var activeFilters = [];
+        if( query && 
+            query.bool && 
+            query.bool.filter && 
+            query.bool.filter.terms && 
+            query.bool.filter.terms[this.filter] ) {
+          
+          activeFilters = query.bool.filter.terms[this.filter];
+        }
+        this.activeFilters = activeFilters;
+
+      }
+
+      appendFilter(e) {
+        var item = this.buckets[parseInt(e.currentTarget.getAttribute('index'))];
+        this.ebEmit('append-search-filter', {
+          key : this.filter,
+          value : item.key,
+          exec : true
+        });
+      }
+
+      removeFilter(e) {
+        var item = this.activeFilters[parseInt(e.currentTarget.getAttribute('index'))];
+        this.ebEmit('remove-search-filter', {
+          key : this.filter,
+          value : item,
+          exec : true
+        });
       }
 
 

@@ -1,0 +1,244 @@
+<!--
+`<paper-range-slider>` is Description
+
+@element paper-range-slider
+-->
+<dom-module id="paper-range-slider">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: calc(30px + var(--range-slider-bar-height, 4px));
+      }
+
+      #rangeContainer {
+        height: var(--range-slider-bar-height, 4px);
+        position: relative;
+      }
+
+      #barContainer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(17px - var(--range-slider-bar-height, 4px)/2);
+        background: var(--range-slider-unselected-color, var(--google-grey-300));
+        height: var(--range-slider-bar-height, 4px);
+      }
+
+      #selectedBarRange {
+        height: var(--range-slider-bar-height, 4px);
+        background: var(--range-slider-selected-color, var(--google-green-500));
+      }
+
+      .slider-knob {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin-left: calc(-15px - var(--range-slider-bar-height, 4px)/2);
+        width: calc(30px + var(--range-slider-bar-height, 4px));
+        height: calc(30px + var(--range-slider-bar-height, 4px));
+      }
+
+      .slider-knob-inner {
+        margin: 10px;
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        background-color: var(--paper-slider-knob-color, var(--google-blue-700));
+        border: 2px solid var(--paper-slider-knob-color, var(--google-blue-700));
+        border-radius: 50%;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        transition-property: -webkit-transform, background-color, border;
+        transition-property: transform, background-color, border;
+        transition-duration: 0.18s;
+        transition-timing-function: ease;
+      }
+
+      .slider-knob-inner[active] {
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+      }
+    </style>
+
+    <div id="rangeContainer">
+      <div id="barContainer">
+        <div id="selectedBarRange"></div>
+      </div>
+
+      <div id="sliderKnobMin" 
+        class="slider-knob" 
+        on-down="_knobdown"
+        on-up="_resetKnob"
+        on-track="_onTrack"
+        on-transitionend="_knobTransitionEnd">
+
+        <div class="slider-knob-inner"></div>
+        <paper-ripple id="ink" center class="circle" style="display: none;"></paper-ripple>
+      </div>
+
+      <div id="sliderKnobMax" 
+        class="slider-knob"
+        on-down="_knobdown"
+        on-up="_Knobup"
+        on-track="_onTrack"
+        on-transitionend="_knobTransitionEnd">
+
+        <div class="slider-knob-inner"></div>
+        <paper-ripple id="ink" center class="circle" style="display: none;"></paper-ripple>
+      </div>
+    </div>
+
+    
+
+  </template>
+
+  <script>
+    class PaperRangeSlider extends Polymer.GestureEventListeners(Polymer.Element) {
+
+      static get is() { return 'paper-range-slider'; }
+
+      static get properties() {
+        return {
+          ratio : {
+            type : Number,
+            value : 0
+          },
+          min : {
+            type : Number,
+            value : 0
+          },
+          max : {
+            type : Number,
+            value : 100
+          },
+          value : {
+            type : Number,
+            value : 0
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_update(value, min, max)'
+        ]
+      }
+
+      connectedCallback() {
+        window.addEventListener('mouseup', this._resetKnob.bind(this));
+        window.addEventListener('touchend', this._resetKnob.bind(this));
+      }
+
+      disconnectedCallback() {
+        window.removeEventListener('mouseup', this._resetKnob.bind(this));
+        window.removeEventListener('touchend', this._resetKnob.bind(this));
+      }
+
+      _update() {
+        // this._validateValue();
+        this._setRatio(this._calcRatio(this.value) * 100);
+      }
+
+      _knobdown(event) {
+        this._activeKob = event.currentTarget;
+        this._setExpand(event.currentTarget, true);
+        
+        // cancel selection
+        event.preventDefault();
+
+        // set the focus manually because we will called prevent default
+        this.focus();
+      }
+
+      _resetKnob() {
+        if( !this._activeKob ) return;
+        this._setExpand(this._activeKob, false);
+        this._activeKob = null;
+      }
+
+      _setExpand(ele, expand) {
+        if( expand ) ele.setAttribute('active', 'active');
+        else ele.removeAttribute('active');
+      }
+
+      _onTrack(event) {
+        event.stopPropagation();
+        console.log(event);
+        switch (event.detail.state) {
+          case 'start':
+            this._trackStart(event);
+            break;
+          case 'track':
+            this._trackX(event);
+            break;
+          case 'end':
+            this._trackEnd();
+            break;
+        }
+      }
+
+      _trackStart(event) {
+        // this._setTransiting(false);
+        this._w = this.$.barContainer.offsetWidth;
+        this._x = this.ratio * this._w / 100;
+        this._startx = this._x;
+        this._knobstartx = this._startx;
+        this._minx = - this._startx;
+        this._maxx = this._w - this._startx;
+        
+        this._activeKob.classList.add('dragging');
+        this._setDragging(true);
+      }
+
+      _trackX(event) {
+        debugger;
+        if (!this.dragging) {
+          this._trackStart(event);
+        }
+    
+        var dx = Math.min(this._maxx, Math.max(this._minx, event.detail.dx));
+        this._x = this._startx + dx;
+        var immediateValue = this._calcKnobPosition(this._x / this._w * 100);
+        // this._setImmediateValue(immediateValue);
+
+        // update knob's position
+        var translateX = ((this._calcRatio(this.immediateValue) * this._w) - this._knobstartx);
+
+        console.log(translateX);
+        this._activeKob.style.transform = 'translate3d('+ translateX + 'px,0,0)';
+      }
+
+      _trackEnd() {
+        var s = this._activeKob.style;
+
+        this._activeKob.classList.remove('dragging');
+        this._setDragging(false);
+        this._resetKnob();
+        this.value = this.immediateValue;
+        s.transform = s.webkitTransform = '';
+
+        // this.fire('change', {composed: true});
+      }
+
+      _calcKnobPosition(ratio) {
+        return (this.max - this.min) * ratio / 100 + this.min;
+      }
+
+
+      _setDragging(dragging) {
+        this._dragging = dragging;
+      }
+
+      _calcRatio(value) {
+        return (value - this.min) / (this.max - this.min);
+      }
+
+      _setRatio(value) {
+        this.ratio = value;
+      }
+
+    }
+
+    window.customElements.define(PaperRangeSlider.is, PaperRangeSlider);
+  </script>
+</dom-module>

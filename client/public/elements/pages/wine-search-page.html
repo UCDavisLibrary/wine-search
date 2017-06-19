@@ -25,12 +25,14 @@
       }
     </style>
 
-    <paper-input label="Seach"></paper-input>
+    <wine-search-text-input></wine-search-text-input>
 
     <div class="root">
       <div class="left">
+        <!--<paper-range-slider></paper-range-slider>-->
+
         <template is="dom-repeat" items="[[facetFilters]]">
-          <wine-search-facet-filter label$="[[item.label]]" filter$="[[item.filter]]"></wine-search-facet-filter>
+          <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
         </template>
       </div>
       <div class="content">
@@ -92,7 +94,8 @@
         var filters = [];
         for( var key in App.config.facets ) {
           filters.push({
-            label : App.config.facets[key],
+            label : App.config.facets[key].label,
+            type : App.config.facets[key].type,
             filter : key
           });
         }
@@ -118,7 +121,6 @@
         this.total = e.response.hits.total;
 
         this.results = e.response.hits.hits.map((item) => item._source);
-        console.log(this.results);
       }
 
     }

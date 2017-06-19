@@ -35,6 +35,12 @@ async function insertMarks() {
   try {
     for( var i = 0; i < marks.length; i++ ) {
       var mark = marks[i];
+
+      mark['name-suggest'] = mark.name
+                                 .split(' ')
+                                 .map(val => val.replace(/\W/g, ''))
+                                 .filter(val => val ? true : false);
+
       await client.index({
         index : index,
         type : 'mark',
@@ -47,5 +53,12 @@ async function insertMarks() {
   }
 }
 
-
-insertMarks().catch((e) => {throw e});
+try {
+  (async function() {
+    await dropIndex();
+    await createIndex();
+    await insertMarks();
+  })()
+} catch(e) {
+  throw e;
+}

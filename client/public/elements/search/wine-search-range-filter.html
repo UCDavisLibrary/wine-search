@@ -1,0 +1,107 @@
+<!--
+`<wine-search-range-filter>` is Description
+
+@element WineSearchRangeFilter
+-->
+<dom-module id="wine-search-range-filter">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      paper-input[type="number"] {
+        width: 75px;
+      }
+      #min {
+        margin-right: 15px;
+      }
+
+    </style>
+
+    <h2 style="margin-bottom:0">[[label]]</h2>
+    <div style="display: flex">
+      <paper-input label="Min" id="min" type="number" on-change="setFilter"></paper-input>
+      <paper-input label="Max" id="max" type="number" on-change="setFilter"></paper-input>
+    </div>
+
+  </template>
+
+  <script>
+    class WineSearchRangeFilter extends AppBaseElement {
+
+      static get is() { return 'wine-search-range-filter'; }
+
+      static get properties() {
+        return {
+          label : {
+            type : String,
+            value : ''
+          },
+          min : {
+            type : Number,
+            value : 0
+          },
+          max : {
+            type : Number,
+            value : 9999
+          },
+          activeRangeMin : {
+            type : Number,
+            value : 0
+          },
+          activeRangeMax : {
+            type : Number,
+            value : 9999
+          },
+          firstLoad : {
+            type : Boolean,
+            value : true
+          }
+        };
+      }
+
+      get ebBind() {
+        return {
+          'search-request-update' : 'onSearchUpdate'
+        }
+      }
+
+      onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+
+        this.activeRangeMin = e.response.aggregations[this.filter+'-min'].value || 0;
+        this.activeRangeMax = e.response.aggregations[this.filter+'-max'].value || 0;
+
+        this.$.min.label = 'Min ($'+this.activeRangeMin+')';
+        this.$.max.label = 'Max ($'+this.activeRangeMax+')';
+
+        this.firstLoad = false;
+      }
+
+      setFilter() {
+        var range = {};
+        if( this.$.min.value ) range.min = parseFloat(this.$.min.value);
+        if( this.$.max.value ) range.max = parseFloat(this.$.max.value);
+
+        this.ebEmit('add-search-range-filter', {
+          key : this.filter,
+          range : range,
+          exec : true
+        });
+      }
+
+      // removeFilter(e) {
+      //   var item = this.activeFilters[parseInt(e.currentTarget.getAttribute('index'))];
+      //   this.ebEmit('remove-search-filter', {
+      //     key : this.filter,
+      //     value : item,
+      //     exec : true
+      //   });
+      // }
+
+    }
+
+    window.customElements.define(WineSearchRangeFilter.is, WineSearchRangeFilter);
+  </script>
+</dom-module>

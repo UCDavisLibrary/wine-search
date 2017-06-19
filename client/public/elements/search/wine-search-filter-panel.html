@@ -1,0 +1,45 @@
+<!--
+`<wine-search-filter-panel>` is Description
+
+@element Name
+-->
+<dom-module id="wine-search-filter-panel">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+  </template>
+
+  <script>
+    class WineSearchFilterPanel extends Polymer.Element {
+
+      static get is() { return 'wine-search-filter-panel'; }
+
+      static get properties() {
+        return {
+          parameters : {
+            type : Object,
+            value : null,
+            observer : '_render'
+          }
+        };
+      }
+
+      _render() {
+        if( !this.parameters ) return;
+
+        this.innerHTML = '';
+        var ele = document.createElement('wine-search-'+this.parameters.type+'-filter');
+        ele.label = this.parameters.label;
+        ele.filter = this.parameters.filter;
+
+        this.shadowRoot.appendChild(ele);
+      }
+
+    }
+
+    window.customElements.define(WineSearchFilterPanel.is, WineSearchFilterPanel);
+  </script>
+</dom-module>
