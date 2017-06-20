@@ -114,7 +114,7 @@
         if( e.state !== 'loaded' ) return;
 
         this.start = (e.body.from === 0 ) ? 1 : e.body.from;
-        this.stop = e.body.from + e.body.size;
+        this.stop = (e.body.from + e.body.size > e.response.hits.total) ? e.response.hits.total : e.body.from + e.body.size;
         this.total = e.response.hits.total;
 
         this.results = e.response.hits.hits.map((item) => item._source);

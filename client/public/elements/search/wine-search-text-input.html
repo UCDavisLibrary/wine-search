@@ -5,19 +5,46 @@
 -->
 <dom-module id="wine-search-text-input">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
-        display: block
+        display: block;
+        position: relative;
+      }
+      
+      [hidden] {
+        display: none;
+      }
+
+      .suggestions {
+        position: absolute;
+        padding: 15px;
+        background: white;
+        left: 0;
+        right: 0;
+        z-index: 100;
+      }
+
+      .suggestions a {
+        cursor: pointer;
+        color: var(--default-primary-color);
+        margin-right: 25px;
+      }
+
+      h3 {
+        margin-top: 0;
+        color: var(--secondary-text-color);
       }
     </style>
 
-    <paper-input label="Search" on-keyup="_onKeyUp" on-blur="search" id="input"></paper-input>
-    <div>
-      <div hidden="[[!suggestions.length]]">Name Suggestions</div>
+    <paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
+
+    <paper-material class="suggestions" hidden$="[[!suggestions.length]]" on-click="_cancelHide">
+      <h3>Suggestions</h3>
       <template is="dom-repeat" items="[[suggestions]]">
-        <span style="margin-right: 25px"><a on-click="_useSuggestion">[[item]]</a></span>
+        <span><a on-click="_useSuggestion">[[item]]</a></span>
       </template>
-    </div>
+    </paper-material>
 
   </template>
 
@@ -37,8 +64,25 @@
         };
       }
 
+      get ebBind() {
+        return Object.assign(
+          super.ebBind,
+          {
+            'suggest-request-update' : 'onSuggestUpdate'
+          }
+        )
+      }
+
       get SUGGEST_KEY() {
         return 'name-suggest'
+      }
+
+      ready() {
+        super.ready();
+
+        window.addEventListener('click', () => {
+          this.suggestions = [];
+        });
       }
 
       _onKeyUp(e) {
@@ -56,14 +100,6 @@
         this.$.input.value;
       }
 
-      bufferSuggest() {
-        this._suggestDebouncer = Polymer.Debouncer.debounce(
-            this._suggestDebouncer, // initially undefined
-            Polymer.Async.timeOut.after(100),
-            this.suggest.bind(this)
-          );
-      }
-
       _useSuggestion(e) {
         var text = e.currentTarget.innerHTML;
         var parts = this.$.input
@@ -73,46 +109,50 @@
 
         parts[parts.length-1] = text;
         this.$.input.value = parts.join(' ');
-        this._cancelSuggest();
         this.search();
       }
 
-      _cancelSuggest() {
-        this.suggestions = [];
-        this.ebEmit('remove-search-suggest', {
-          key : this.SUGGEST_KEY
-        });
+      bufferSuggest() {
+        this._suggestDebouncer = Polymer.Debouncer.debounce(
+          this._suggestDebouncer, // initially undefined
+          Polymer.Async.timeOut.after(100),
+          this.suggest.bind(this)
+        );
       }
 
       suggest() {
-        var parts = this.$.input
-          .value
+        var parts = (this.$.input.value || '')
           .split(' ')
           .filter(val => val.length ? true : false);
 
         if( parts.length === 0 ) {
-          this._cancelSuggest();
+          this.suggestions = [];
           return;
         }
 
         var suggestOn = parts[parts.length-1];
 
         if( suggestOn.length < 1 ) {
-          this._cancelSuggest();
+          this.suggestions = [];
           return;
         }
 
-        this.ebEmit('add-search-suggest', {
-          key : this.SUGGEST_KEY,
-          value : suggestOn,
+        this.ebEmit('suggest-request', {
+          text : suggestOn,
           exec : true
         });
       }
 
-      onSearchUpdate(e) {
+      _cancelHide(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      onSuggestUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
         var resp = e.response;
+
         this.suggestions = [];
 
         if( !resp.suggest ) return;
@@ -131,6 +171,11 @@
                               } 
                               return arr;
                             }, []);
+      }
+
+      onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+        this.suggestions = [];
       }
 
     }

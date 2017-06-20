@@ -1,5 +1,6 @@
 var combineReducers = require('redux').combineReducers;
 
 module.exports = combineReducers({
-  search : require('./search')
+  search : require('./search'),
+  suggest : require('./suggest')
 });

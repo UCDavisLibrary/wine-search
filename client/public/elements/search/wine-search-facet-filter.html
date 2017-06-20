@@ -102,11 +102,15 @@
         var activeFilters = [];
         if( query && 
             query.bool && 
-            query.bool.filter && 
-            query.bool.filter.terms && 
-            query.bool.filter.terms[this.filter] ) {
+            query.bool.filter ) {
           
-          activeFilters = query.bool.filter.terms[this.filter];
+          var arr = query.bool.filter;
+
+          for( var i = 0; i < arr.length; i++ ) {
+            if( arr[i].terms[this.filter] ) {
+              activeFilters = arr[i].terms[this.filter];
+            }
+          }
         }
         this.activeFilters = activeFilters;
 

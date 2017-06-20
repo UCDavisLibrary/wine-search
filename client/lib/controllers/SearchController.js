@@ -23,17 +23,16 @@ class SearchController extends EventController {
       addRangeFilter : {
         triggerEvent : 'add-search-range-filter'
       },
-      addSuggest : {
-        triggerEvent : 'add-search-suggest'
-      },
-      removeSuggest : {
-        triggerEvent : 'remove-search-suggest'
-      },
       textSearch : {
         triggerEvent : 'text-search'
       },
       setPaging : {
         triggerEvent : 'set-search-paging'
+      },
+
+      suggest : {
+        triggerEvent : 'suggest-request',
+        updateEvent : 'suggest-request-update'
       }
     }
 
@@ -49,6 +48,13 @@ class SearchController extends EventController {
       console.error(state.response);
     }
     this.eventBus.emit(this.handle.search.updateEvent, state);
+  }
+
+  suggestObserver(state) {
+    if( state.response && state.response.error ) {
+      console.error(state.response);
+    }
+    this.eventBus.emit(this.handle.suggest.updateEvent, state);
   }
 
   getSearch() {
@@ -67,12 +73,8 @@ class SearchController extends EventController {
     return model.removeFilter(e.key, e.value, e.exec);
   }
 
-  addSuggest(e) {
-    return model.addSuggest(e.key, e.value, e.exec);
-  }
-  
-  removeSuggest(e) {
-    return model.removeSuggest(e.key, e.exec);
+  suggest(e) {
+    return model.suggest(e.text, e.exec);
   }
 
   textSearch(e) {

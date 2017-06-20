@@ -2,6 +2,7 @@ var ReduxModel = require('./ReduxModel');
 var config = require('../config');
 var service = require('../services/search');
 var actions = require('../redux/actions/search');
+var suggestActions = require('../redux/actions/suggest');
 
 
 class SearchModel extends ReduxModel {
@@ -52,6 +53,10 @@ class SearchModel extends ReduxModel {
     return this.getState().search;
   }
 
+  getSuggest() {
+    return this.getState().suggest;
+  }
+
   setPaging(from = 0, size = 10, exec) {
     this.from = from;
     this.size = size;
@@ -60,14 +65,34 @@ class SearchModel extends ReduxModel {
   }
 
   appendFilter(key, value, exec) {
-    this.ensurePath('query.bool.filter.terms');
+    // this.ensurePath('query.bool.filter.terms');
+    this.ensurePath('query.bool.filter', []);
     var body = this.getSearch().body;
 
-    if( !body.query.bool.filter.terms[key] ) {
-      body.query.bool.filter.terms[key] = [value];
-    } else {
-      body.query.bool.filter.terms[key].push(value);
+    var arr = body.query.bool.filter;
+    var updated = false;
+
+    for( var i = 0; i < arr; i++ ) {
+      if( arr[i].terms[key] ) {
+        arr[i].terms[key].push(value);
+        updated = true;
+        break;
+      }
     }
+
+    if( !updated ) {
+      arr.push({
+        terms : {
+          [key] : [value]
+        }
+      });
+    }
+
+    // if( !body.query.bool.filter.terms[key] ) {
+    //   body.query.bool.filter.terms[key] = [value];
+    // } else {
+    //   body.query.bool.filter.terms[key].push(value);
+    // }
 
     if( exec ) {
       this.setPaging(); // reset page
@@ -78,17 +103,17 @@ class SearchModel extends ReduxModel {
   }
 
   removeFilter(key, value, exec) {
-    this.ensurePath('query.bool.filter.terms');
+    // this.ensurePath('query.bool.filter.terms');
+    this.ensurePath('query.bool.filter', []);
     var body = this.getSearch().body;
 
-    var arr = body.query.bool.filter.terms[key];
-    if( arr ) {
-      if( arr.indexOf(value) > -1 ) {
-        arr.splice(arr.indexOf(value), 1);
-      }
+    var arr = body.query.bool.filter;
 
-      if( arr.length === 0 ) {
-        delete body.query.bool.filter.terms[key];
+    for( var i = 0; i < arr.length; i++ ) {
+      if( arr[i].terms[key] ) {
+        if( arr[i].terms[key].indexOf(value) > -1 ) {
+          arr[i].terms[key].splice(arr[i].terms[key].indexOf(value), 1);
+        }
       }
     }
 
@@ -146,19 +171,20 @@ class SearchModel extends ReduxModel {
     return body;
   }
 
-  addSuggest(key, value, exec) {
+  suggest(text, exec) {
     this.ensurePath('suggest');
-    var body = this.getSearch().body;
+    var body = this.getSuggest().body;
+    body = {suggest: {}};
 
-    body.suggest[key] = {
-      prefix : value,
+    body.suggest['name-suggest'] = {
+      prefix : text,
       completion : {
-        field : key,
+        field : 'name-suggest',
         fuzzy : {}
       }
     }
 
-    if( exec ) this.search(body);
+    if( exec ) this.dispatch(suggestActions.suggest(body, service));
 
     return body;
   }
