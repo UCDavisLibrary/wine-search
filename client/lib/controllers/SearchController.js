@@ -11,8 +11,8 @@ class SearchController extends EventController {
         triggerEvent : 'search-request',
         updateEvent : 'search-request-update'
       },
-      getSearchBody : {
-        triggerEvent : 'get-search-body'
+      getSearch : {
+        triggerEvent : 'get-search'
       },
       appendFilter : {
         triggerEvent : 'append-search-filter'
@@ -31,6 +31,9 @@ class SearchController extends EventController {
       },
       textSearch : {
         triggerEvent : 'text-search'
+      },
+      setPaging : {
+        triggerEvent : 'set-search-paging'
       }
     }
 
@@ -42,11 +45,14 @@ class SearchController extends EventController {
   }
 
   searchObserver(state) {
+    if( state.response && state.response.error ) {
+      console.error(state.response);
+    }
     this.eventBus.emit(this.handle.search.updateEvent, state);
   }
 
-  getSearchBody() {
-    return model.getSearchBody();  
+  getSearch() {
+    return model.getSearch();  
   }
 
   addRangeFilter(e) {
@@ -71,6 +77,10 @@ class SearchController extends EventController {
 
   textSearch(e) {
     return model.textSearch(e.text, e.options);
+  }
+
+  setPaging(e) {
+    return model.setPaging(e.from, e.size, e.exec);
   }
 
 }

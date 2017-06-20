@@ -1,0 +1,91 @@
+<!--
+`<wine-search-pagination>` is Description
+
+@element wine-search-pagination
+-->
+<dom-module id="wine-search-pagination">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <div style="display:flex; align-items: center">
+      <paper-icon-button 
+        icon="arrow-back" 
+        disabled$="[[!backEnabled]]"
+        on-click="back">
+      </paper-icon-button>
+      <div style="flex:1; text-align:center">
+        <slot></slot>
+      </div>
+      <paper-icon-button 
+        icon="arrow-forward" 
+        disabled$="[[!forwardEnabled]]"
+        on-click="forward">
+      </paper-icon-button>
+    </div>
+    
+  </template>
+
+  <script>
+    class WineSearchPagination extends AppSearchElement {
+
+      static get is() { return 'wine-search-pagination'; }
+
+      static get properties() {
+        return {
+          backEnabled : {
+            type : Boolean,
+            value : false
+          },
+          forwardEnabled : {
+            type : Boolean,
+            value : false
+          },
+          start : {
+            type : Number,
+            value : 0
+          },
+          itemsPerPage : {
+            type : Number,
+            value : 0
+          }
+        }
+      }
+
+      onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+
+        this.start = e.body.from;
+        this.itemsPerPage = e.body.size;
+        
+        var total = e.response.hits.total;
+
+        this.backEnabled = (this.start === 0) ? false : true;
+        this.forwardEnabled = (this.start + this.itemsPerPage < total ) ? true : false;
+      }
+
+      back() {
+        var from = this.start - this.itemsPerPage;
+        if( from < 0 ) from = 0;
+        this.ebEmit('set-search-paging', {
+          from : from,
+          exec : true
+        });
+      }
+
+      forward() {
+        var from = this.start + this.itemsPerPage;
+        this.ebEmit('set-search-paging', {
+          from : from,
+          exec : true
+        });
+      }
+
+    }
+
+    window.customElements.define(WineSearchPagination.is, WineSearchPagination);
+  </script>
+</dom-module>

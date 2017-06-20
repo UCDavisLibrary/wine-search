@@ -28,7 +28,7 @@
   </template>
 
   <script>
-    class WineSearchRangeFilter extends AppBaseElement {
+    class WineSearchRangeFilter extends AppSearchElement {
 
       static get is() { return 'wine-search-range-filter'; }
 
@@ -59,12 +59,6 @@
             value : true
           }
         };
-      }
-
-      get ebBind() {
-        return {
-          'search-request-update' : 'onSearchUpdate'
-        }
       }
 
       onSearchUpdate(e) {

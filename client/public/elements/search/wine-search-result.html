@@ -5,13 +5,27 @@
 -->
 <dom-module id="wine-search-result">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block
       }
+      .price {
+        color: var(--default-primary-color);
+      }
+      .vintage {
+        color: var(--secondary-text-color);
+        margin-top: 0;
+      }
     </style>
 
-    <h2>[[result.name]]</h2>
+    <div style="display:flex">
+      <h1 style="flex:1">[[result.name]]</h2>
+      <h2 class="price">
+        <span>$[[result.perprice]]</span>
+      </h4>
+    </div>
+    <h2 class="vintage">[[result.vintage]]</h4>
 
   </template>
 

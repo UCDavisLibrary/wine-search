@@ -1,0 +1,20 @@
+<link rel="import" href="app-base-element.html">
+
+<script>
+  class AppSearchElement extends AppBaseElement {
+      get ebBind() {
+        return {
+          'search-request-update' : 'onSearchUpdate'
+        }
+      }
+
+      ready() {
+        super.ready();
+        this.ebEmit('get-search', {handler: this.onSearchUpdate.bind(this)});
+      }
+
+      onSearchUpdate(e) {
+        // implement me
+      }
+  }
+</script>
