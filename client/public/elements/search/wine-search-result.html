@@ -28,7 +28,7 @@
     <div style="display:flex">
       <h1 style="flex:1"><span class="vintage">[[result.vintage]]</span> [[result.name]]</h2>
       <h2 class="price">
-        <span>$[[result.perprice]]</span>
+        <span>$[[price]]</span>
       </h4>
     </div>
 
@@ -37,7 +37,6 @@
       <tr hidden$="[[!result.color]]"><td><b>Color</b></td><td>[[result.color]]</td></tr>
       <tr hidden$="[[!result.country]]"><td><b>Country</b></td><td>[[result.country]]</td></tr>
       <tr hidden$="[[!result.bottletype]]"><td><b>Bottle Type</b></td><td>[[result.bottletype]]</td></tr>
-      <tr hidden$="[[!result.producer]]"><td><b>Producer</b></td><td>[[result.producer]]</td></tr>
     </table>
 
     <div style="display: flex; align-items: flex-end">
@@ -67,11 +66,19 @@
               return {};
             }
           },
+          price : {
+            type : String,
+            computed : '_price(result)'
+          },
           editUrl : {
             type : String,
             computed : '_editUrl(result)'
           }
         };
+      }
+
+      _price(result) {
+        return result.perprice.toFixed(2);
       }
 
       _editUrl(result) {

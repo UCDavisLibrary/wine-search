@@ -30,10 +30,6 @@ module.exports = {
     'bottletype.raw' : {
       label : 'Bottle Type',
       type : 'facet'
-    },
-    'producer.raw' : {
-      label : 'Producer',
-      type : 'facet'
     }
   },
   

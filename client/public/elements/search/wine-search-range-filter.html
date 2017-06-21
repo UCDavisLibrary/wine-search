@@ -71,8 +71,13 @@
         this.activeRangeMin = e.response.aggregations[this.filter+'-min'].value || 0;
         this.activeRangeMax = e.response.aggregations[this.filter+'-max'].value || 0;
 
-        this.$.min.label = 'Min '+(this.isDollar ? '$' : '')+this.activeRangeMin;
-        this.$.max.label = 'Max '+(this.isDollar ? '$' : '')+this.activeRangeMax;
+        if( this.isDollar ) {
+          this.$.min.label = 'Min $'+this.activeRangeMin.toFixed(2);
+          this.$.max.label = 'Max $'+this.activeRangeMax.toFixed(2);
+        } else {
+          this.$.min.label = 'Min '+this.activeRangeMin;
+          this.$.max.label = 'Max '+this.activeRangeMax;
+        }
 
         this.firstLoad = false;
       }

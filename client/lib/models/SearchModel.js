@@ -153,7 +153,7 @@ class SearchModel extends ReduxModel {
   addRangeFilter(key, range, exec) {
     this.ensurePath('query.bool.must', []);
     var body = this.getSearch().body;
-    var rangeQuery = this.getOrCreateFromArray(body.query.bool.must, 'range');
+    var rangeQuery = this.getOrCreateFromArray(body.query.bool.must, 'range', key);
 
     rangeQuery[key] = {};
     if( range.min !== undefined ) {
@@ -281,10 +281,16 @@ class SearchModel extends ReduxModel {
 
   }
 
-  getOrCreateFromArray(array, type) {
+  getOrCreateFromArray(array, type, subtype) {
     for( var i = 0; i < array.length; i++ ) {
       if( array[i][type] ) {
-        return array[i][type];
+        if( subtype ) {
+          if( array[i][type][subtype] ) {
+            return array[i][type];
+          }
+        } else {
+          return array[i][type];
+        }
       }
     }
 
