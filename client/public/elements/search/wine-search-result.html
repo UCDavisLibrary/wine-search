@@ -14,19 +14,44 @@
         color: var(--default-primary-color);
       }
       .vintage {
+        color: var(--dark-primary-color);
+        /*font-weight: bold;*/
+      }
+      a {
+        color: var(--default-primary-color);
+      }
+      .publisher {
         color: var(--secondary-text-color);
-        margin-top: 0;
       }
     </style>
 
     <div style="display:flex">
-      <h1 style="flex:1">[[result.name]]</h2>
+      <h1 style="flex:1"><span class="vintage">[[result.vintage]]</span> [[result.name]]</h2>
       <h2 class="price">
         <span>$[[result.perprice]]</span>
       </h4>
     </div>
-    <h2 class="vintage">[[result.vintage]]</h4>
 
+    <table style="border-spacing: 6px">
+      <tr hidden$="[[!result.winetype]]"><td><b>Wine Type</b></td><td>[[result.winetype]]</td></tr>
+      <tr hidden$="[[!result.color]]"><td><b>Color</b></td><td>[[result.color]]</td></tr>
+      <tr hidden$="[[!result.country]]"><td><b>Country</b></td><td>[[result.country]]</td></tr>
+      <tr hidden$="[[!result.bottletype]]"><td><b>Bottle Type</b></td><td>[[result.bottletype]]</td></tr>
+      <tr hidden$="[[!result.producer]]"><td><b>Producer</b></td><td>[[result.producer]]</td></tr>
+    </table>
+
+    <div style="display: flex; align-items: flex-end">
+
+      <div class="publisher" style="flex:1">
+        <h3 style="margin-bottom:0">Published [[result.publication_date]]</h3>
+        <div>[[result.publisher]]</div>
+        <div>[[result.title]]</div>
+      </div>
+
+      <div style="text-align: right">
+        <a href$="[[editUrl]]" target="_blank"><paper-icon-button icon="create"></paper-icon-button></a>
+      </div>
+    </div>
   </template>
 
   <script>
@@ -41,9 +66,18 @@
             value : function() {
               return {};
             }
+          },
+          editUrl : {
+            type : String,
+            computed : '_editUrl(result)'
           }
         };
       }
+
+      _editUrl(result) {
+        return `https://ptv.library.ucdavis.edu/#${result.catalog_id}/${result.page_id}/view/${result.mark_id}`;
+      }
+
     }
 
     window.customElements.define(WineSearchResult.is, WineSearchResult);

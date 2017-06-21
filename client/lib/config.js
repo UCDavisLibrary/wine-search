@@ -2,21 +2,38 @@ module.exports = {
   // facets to show on left side
   // filter : label
   facets : {
-    vintage : {
-      label : 'Vintage',
-      type : 'facet'
-    },
-    'bottletype.raw' : {
-      label : 'Bottle Type',
+    'color.raw' : {
+      label : 'Color',
       type : 'facet'
     },
     'winetype.raw' : {
       label : 'Wine Type',
       type : 'facet'
     },
+    vintage : {
+      label : 'Vintage',
+      type : 'range'
+    },
+    publication_date : {
+      label : 'Published',
+      type : 'range'
+    },
     perprice : {
       label : 'Bottle Price',
-      type : 'range'
+      type : 'range',
+      isDollar : true
+    },
+    'country.raw' : {
+      label : 'Country',
+      type : 'facet'
+    },
+    'bottletype.raw' : {
+      label : 'Bottle Type',
+      type : 'facet'
+    },
+    'producer.raw' : {
+      label : 'Producer',
+      type : 'facet'
     }
   },
   

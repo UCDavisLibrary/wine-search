@@ -34,7 +34,8 @@
         var ele = document.createElement('wine-search-'+this.parameters.type+'-filter');
         ele.label = this.parameters.label;
         ele.filter = this.parameters.filter;
-
+        ele.isDollar = this.parameters.isDollar;
+        
         this.shadowRoot.appendChild(ele);
       }
 

@@ -36,10 +36,18 @@ async function insertMarks() {
     for( var i = 0; i < marks.length; i++ ) {
       var mark = marks[i];
 
-      mark['name-suggest'] = mark.name
+      mark['name-suggest'] = (mark.name || '')
                                  .split(' ')
                                  .map(val => val.replace(/\W/g, ''))
                                  .filter(val => val ? true : false);
+      
+      if( !mark.vintage || mark.vintage < 1600 ) {
+        delete mark.vintage;
+      }
+
+      for( var key in mark ) {
+        if( !mark[key] ) delete mark[key];
+      }
 
       await client.index({
         index : index,
@@ -55,7 +63,11 @@ async function insertMarks() {
 
 try {
   (async function() {
-    await dropIndex();
+
+    try {
+      await dropIndex();
+    } catch(e) {}
+    
     await createIndex();
     await insertMarks();
   })()

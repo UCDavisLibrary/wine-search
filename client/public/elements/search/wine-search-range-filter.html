@@ -11,7 +11,7 @@
       }
 
       paper-input[type="number"] {
-        width: 75px;
+        width: 85px;
       }
       #min {
         margin-right: 15px;
@@ -57,6 +57,10 @@
           firstLoad : {
             type : Boolean,
             value : true
+          },
+          isDollar : {
+            type : Boolean,
+            value : false
           }
         };
       }
@@ -67,8 +71,8 @@
         this.activeRangeMin = e.response.aggregations[this.filter+'-min'].value || 0;
         this.activeRangeMax = e.response.aggregations[this.filter+'-max'].value || 0;
 
-        this.$.min.label = 'Min ($'+this.activeRangeMin+')';
-        this.$.max.label = 'Max ($'+this.activeRangeMax+')';
+        this.$.min.label = 'Min '+(this.isDollar ? '$' : '')+this.activeRangeMin;
+        this.$.max.label = 'Max '+(this.isDollar ? '$' : '')+this.activeRangeMax;
 
         this.firstLoad = false;
       }
@@ -84,15 +88,6 @@
           exec : true
         });
       }
-
-      // removeFilter(e) {
-      //   var item = this.activeFilters[parseInt(e.currentTarget.getAttribute('index'))];
-      //   this.ebEmit('remove-search-filter', {
-      //     key : this.filter,
-      //     value : item,
-      //     exec : true
-      //   });
-      // }
 
     }
 
