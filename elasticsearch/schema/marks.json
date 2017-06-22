@@ -49,6 +49,10 @@
       }
     },
 
+    "country-suggest" : {
+      "type": "completion"
+    },
+
     "name" : {
       "type": "text",
       "fields": {
@@ -62,7 +66,7 @@
       "type": "completion"
     },
 
-    "producer" : {
+    "section" : {
       "type": "text",
       "fields": {
         "raw": { 
@@ -71,13 +75,8 @@
       }
     },
 
-    "section" : {
-      "type": "text",
-      "fields": {
-        "raw": { 
-          "type":  "keyword"
-        }
-      }
+    "section-suggest" : {
+      "type": "completion"
     },
 
     "bottletype" : {
@@ -94,6 +93,10 @@
     },
 
     "perprice" : {
+      "type" : "float"
+    },
+
+    "perprice2017" : {
       "type" : "float"
     },
 

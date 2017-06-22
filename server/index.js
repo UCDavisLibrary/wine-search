@@ -10,6 +10,7 @@ app.use(bodyParser.json());
  * Register Controllers
  */
 app.use('/search', require('./controllers/search'));
+app.use('/stats', require('./controllers/stats'));
 
 /**
  * Set static asset path

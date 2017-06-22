@@ -7,6 +7,7 @@ var client = new elasticsearch.Client({
 var index = 'wine-search';
 var marks = require('./data/marks');
 var schema = require('./schema/marks');
+var cpi = require('./cpi');
 
 async function dropIndex() {
   try {
@@ -49,6 +50,10 @@ async function insertMarks() {
         if( !mark[key] ) delete mark[key];
       }
 
+      if( mark.perprice && mark.publication_date ) {
+        mark.perprice2017 = calc2017(mark.perprice, mark.publication_date);
+      }
+
       await client.index({
         index : index,
         type : 'mark',
@@ -73,4 +78,8 @@ try {
   })()
 } catch(e) {
   throw e;
+}
+
+function calc2017(price, year) {
+  return parseFloat(((price * cpi['2017']) / cpi[year+'']).toFixed(2));
 }

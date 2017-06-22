@@ -122,8 +122,8 @@
                           if( this.activeFilters.indexOf(bucket.key) > -1 ) return false;
                           return true;
                         });
-        
-        if( this.activeFilters.length == 0 &&
+                        
+        if( this.activeFilters.length === 0 &&
             this.buckets.length === 0 ) {
           this.style.display = 'none';
         } else {
