@@ -5,6 +5,7 @@
 -->
 <dom-module id="wine-search-facet-filter">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block
@@ -46,26 +47,29 @@
       }
     </style>
 
-    <h2>[[label]]</h2>
-    <div style="margin-bottom: 15px" hidden="[[!activeFilters.length]]">
-      <template is="dom-repeat" items="[[activeFilters]]">
-        <div>
-          <div style="display:inline-block">
-            <a class="active-filter" on-click="removeFilter" index$="[[index]]">
-              <iron-icon icon="cancel"></iron-icon>
-              <span>[[item]]</span>
-            </a>
+    <cork-toggle-panel label="[[label]]">
+      <div style="margin-bottom: 15px" hidden="[[!activeFilters.length]]">
+        <template is="dom-repeat" items="[[activeFilters]]">
+          <div>
+            <div style="display:inline-block">
+              <a class="active-filter" on-click="removeFilter" index$="[[index]]">
+                <iron-icon icon="cancel"></iron-icon>
+                <span>[[item]]</span>
+              </a>
+            </div>
           </div>
-        </div>
-      </template>
-    </div>
-    <div>
-      <template is="dom-repeat" items="[[buckets]]">
-        <div class="filter">
-          <a on-click="appendFilter" index$="[[index]]">[[item.key]] <span>([[item.doc_count]])</span></a>
-        </div>
-      </template>
-    </div>
+        </template>
+      </div>
+      
+      <div>
+        <template is="dom-repeat" items="[[buckets]]">
+          <div class="filter">
+            <a on-click="appendFilter" index$="[[index]]">[[item.key]] <span>([[item.doc_count]])</span></a>
+          </div>
+        </template>
+      </div>
+    </cork-toggle-panel>
+    
 
   </template>
 

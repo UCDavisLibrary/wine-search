@@ -5,6 +5,7 @@
 -->
 <dom-module id="wine-search-range-filter">
   <template>
+    <style include="shared-styles"></style>
     <style>
       :host {
         display: block
@@ -19,11 +20,12 @@
 
     </style>
 
-    <h2 style="margin-bottom:0">[[label]]</h2>
-    <div style="display: flex">
-      <paper-input label="Min" id="min" type="number" on-change="setFilter"></paper-input>
-      <paper-input label="Max" id="max" type="number" on-change="setFilter"></paper-input>
-    </div>
+    <cork-toggle-panel label="[[label]]">
+      <div style="display: flex">
+        <paper-input label="Min" id="min" type="number" on-change="setFilter"></paper-input>
+        <paper-input label="Max" id="max" type="number" on-change="setFilter"></paper-input>
+      </div>
+    </cork-toggle-panel>
 
   </template>
 

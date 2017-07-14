@@ -7,23 +7,32 @@
       margin: 0;
       padding:0;
       height: 100%;
-      background-color: #eee;
+      background-color: rgb(242, 243, 238);
+      color: rgb(51, 41, 38);
     }
 
     :root {
-      --dark-primary-color:       #7B1FA2;
-      --default-primary-color:    #9C27B0;
-      --light-primary-color:      #E1BEE7;
-      --text-primary-color:       #FFFFFF;
-      --accent-color:             #4CAF50;
-      --primary-background-color: #E1BEE7;
-      --primary-text-color:       #212121;
+
+      --default-primary-color:    rgb(145, 32, 70);
+
+      --dark-background-color: rgb(51, 41, 38);
+      --medium-background-color: rgb(213, 213, 203);
+      --light-background-color: rgb(242, 243, 238);
+
+      
+      --accent-color:             rgb(142, 106, 73);
+      
+      --text-primary-color:       rgb(51, 41, 38);
+      --primary-text-color:       var(--text-primary-color);
       --secondary-text-color:     #757575;
       --disabled-text-color:      #BDBDBD;
-      --divider-color:            #BDBDBD;
-      --green: #4CAF50;
+
       --primary-color: var(--default-primary-color);
-      --primary-background-color: white;
+
+      --red-wine : #CC1D32;
+      --rose-wine : #ED9898;
+      --white-wine : #F7D797;
+
       --select-input: {
         width: 100%;
         border: 0;
@@ -64,6 +73,14 @@
 <dom-module id="shared-styles">
   <template>
     <style>
+
+      paper-icon-button {
+        color: var(--default-primary-color);
+      }
+      paper-icon-button[disabled] {
+        color: var(--secondary-text-color);
+      }
+
       h1, h2, h3, h4 {
         font-weight: 200;
       }
@@ -78,108 +95,27 @@
         box-shadow: none;
         background: none;
       }
-      paper-input[disabled] {
-        --paper-input-container: {
-          opacity: 1 !important;
-        }
-        --paper-input-container-input: {
-          color: var(--primary-text-color);
-        }
-        --paper-input-container-label-floating : {
-          color: var(--primary-text-color);
-        }
-        --paper-input-container-underline-disabled : {
-          border: none;
-        }
-      }
-      .layout-vertical {
-        @apply(--layout-vertical);
-      }
-      .layout {
-        @apply(--layout-horizontal);
-      }
-      .stretch {
-        @apply( --layout-self-stretch);
-      }
-      .center {
-        @apply(--layout-center);
-      }
-      .flex {
-        @apply(--layout-flex);
-      }
-     blockquote {
-         border-left: 4px solid #eee;
-         margin-left: 4px;
-         padding-left: 20px;
-      }
-     .card {
-         margin: 24px;
-         padding: 16px;
-         color: #757575;
-         border-radius: 5px;
-         background-color: #fff;
-         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
-      .circle {
-        display: inline-block;
-        width: 64px;
-        height: 64px;
+
+      .center-content-outer {
         text-align: center;
-        color: #555;
-        border-radius: 50%;
-        background: #ddd;
-        font-size: 30px;
-        line-height: 64px;
       }
-      h1 {
-        margin: 16px 0;
-        color: #212121;
-        font-size: 22px;
+      .center-content-inner {
+        max-width: 1000px; 
+        margin: auto; 
+        text-align: left;
       }
-      .grid-card {
-        position: relative;
-        width: 275px;
-        height: 136px;
-        padding: 8px;
+
+      cork-toggle-panel {
+        min-width: 300px;
+        --cork-toggle-panel-label: {
+          color: var(--accent-color);
+          text-transform: uppercase;
+          font-size: 16px;
+          padding: 5px;
+        };
+        --cork-togglee-panel-icon-color: var(--default-primary-color);
       }
-      .grid-thumbnail {
-        position: relative;
-        width: 160px;
-        height: 192px;
-        padding: 8px;
-      }
-      .grid-card-img {
-        display: block;
-        background-color: #ddd;
-        width: 160px;
-        height: 192px;
-      }
-      .grid-item .detail {
-        display: none;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(0,0,0,.8);
-      }
-      .grid-item:hover .detail {
-        display: block;
-      }
-      .grid-item {
-        position: relative;
-        width: 98px;
-        /*height: 144px;*/
-        padding: 8px;
-      }
-      .grid-item-img {
-        display: block;
-        background-color: #ddd;
-        width: 94px;
-        height: 124px;
-      }
-      .form-row {
-        height: 72px;
-      }
+
     </style>
   </template>
 </dom-module>

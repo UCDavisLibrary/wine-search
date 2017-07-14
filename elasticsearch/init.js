@@ -42,6 +42,13 @@ async function insertMarks() {
                                  .map(val => val.replace(/\W/g, ''))
                                  .filter(val => val ? true : false);
       
+      if( mark.country ) {
+        mark['country-suggest'] = mark.country;
+      }
+      if( mark.section ) {
+        mark['section-suggest'] = mark.section;
+      }
+      
       if( !mark.vintage || mark.vintage < 1600 ) {
         delete mark.vintage;
       }

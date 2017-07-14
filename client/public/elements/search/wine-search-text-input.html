@@ -35,16 +35,34 @@
         margin-top: 0;
         color: var(--secondary-text-color);
       }
+
+      cork-search-box {
+        width: 66%;
+        --cork-search-box-btn: {
+          background: var(--default-primary-color);
+          color: white;
+        }
+      }
+
+      @media(max-width: 768px) {
+        cork-search-box {
+          width: 100%;
+        }
+      }
     </style>
 
-    <paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
+    <div style="display: flex; justify-content: center">
+      <cork-search-box></cork-search-box>
+    </div>
+
+    <!--<paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
 
     <paper-material class="suggestions" hidden$="[[!suggestions.length]]" on-click="_cancelHide">
       <h3>Suggestions</h3>
       <template is="dom-repeat" items="[[suggestions]]">
         <span><a on-click="_useSuggestion">[[item]]</a></span>
       </template>
-    </paper-material>
+    </paper-material>-->
 
   </template>
 

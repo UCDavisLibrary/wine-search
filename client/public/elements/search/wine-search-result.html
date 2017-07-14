@@ -10,47 +10,81 @@
       :host {
         display: block
       }
-      .price {
-        color: var(--default-primary-color);
+      
+      .bold {
+        font-size: 18px;
+        font-weight: bold;
       }
-      .vintage {
-        color: var(--dark-primary-color);
-        /*font-weight: bold;*/
+
+      .accent {
+        color: var(--accent-color);
+        font-style: italic;
       }
+
       a {
-        color: var(--default-primary-color);
+        position: absolute;
+        left: -35px;
+        bottom: 10px;
+        z-index: 2;
+        background-color: var(--default-primary-color);
+        border: 2px solid white;
+        color: white;
+        padding: 6px;
       }
+      
       .publisher {
-        color: var(--secondary-text-color);
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: var(--medium-background-color);
       }
+
+      iron-image {
+        width : 175px; 
+        height : 225px; 
+        background-color: var(--dark-background-color);
+      }
+
+
+
+      h2 {
+        margin: 10px;
+        border-bottom: 1px solid var(--medium-background-color);
+      }
+
     </style>
 
-    <div style="display:flex">
-      <h1 style="flex:1"><span class="vintage">[[result.vintage]]</span> [[result.name]]</h2>
-      <h2 class="price">
-        <span>$[[price]]</span>
-      </h4>
+    <div style="display: flex">
+      <iron-image src$="[[coverUrl]]" sizing="cover"></iron-image>
+      <div style="flex:1; position: relative">
+        <h2><span class="bold">[[result.vintage]]</span> [[result.name]]</h2>
+
+        <div style="display:flex; margin-left: 10px">
+          <div style="flex:1">
+            <div class="bold">$[[price]]</div>
+            <div class="accent">[[result.publication_date]]</div>
+            <div class="bold" style="padding-top:10px">$[[price2017]]</div>
+            <div class="accent">adjusted for inflation</div>
+          </div>
+          <div style="flex:1">
+            <div>[[result.color]] [[result.winetype]]</div>
+            <div>[[result.country]]</div>
+            <div>[[result.bottletype]]</div>
+          </div>
+        </div>
+
+        <a href$="[[editUrl]]" target="_blank"><iron-icon icon="open-in-new"></iron-icon></a>
+        <div class="publisher" style="flex:1">
+          <div>Published [[result.publication_date]] [[result.publisher]]</div>
+          <div>[[result.title]]</div>
+        </div>
+
+      </div>
     </div>
 
-    <table style="border-spacing: 6px">
-      <tr hidden$="[[!result.winetype]]"><td><b>Wine Type</b></td><td>[[result.winetype]]</td></tr>
-      <tr hidden$="[[!result.color]]"><td><b>Color</b></td><td>[[result.color]]</td></tr>
-      <tr hidden$="[[!result.country]]"><td><b>Country</b></td><td>[[result.country]]</td></tr>
-      <tr hidden$="[[!result.bottletype]]"><td><b>Bottle Type</b></td><td>[[result.bottletype]]</td></tr>
-    </table>
-
-    <div style="display: flex; align-items: flex-end">
-
-      <div class="publisher" style="flex:1">
-        <h3 style="margin-bottom:0">Published [[result.publication_date]]</h3>
-        <div>[[result.publisher]]</div>
-        <div>[[result.title]]</div>
-      </div>
-
-      <div style="text-align: right">
-        <a href$="[[editUrl]]" target="_blank"><paper-icon-button icon="create"></paper-icon-button></a>
-      </div>
-    </div>
   </template>
 
   <script>
@@ -70,9 +104,17 @@
             type : String,
             computed : '_price(result)'
           },
+          price2017 : {
+            type : String,
+            computed : '_price2017(result)'
+          },
           editUrl : {
             type : String,
             computed : '_editUrl(result)'
+          },
+          coverUrl : {
+            type : String,
+            computed : '_coverUrl(result)'
           }
         };
       }
@@ -81,8 +123,16 @@
         return result.perprice.toFixed(2);
       }
 
+      _price2017(result) {
+        return result.perprice2017.toFixed(2);
+      }
+
       _editUrl(result) {
         return `https://ptv.library.ucdavis.edu/#${result.catalog_id}/${result.page_id}/view/${result.mark_id}`;
+      }
+
+      _coverUrl(result) {
+        return `https://wine-api.library.ucdavis.edu/media?select=thumbnail2x_png&media_id=eq.${result.catalog_id}`;
       }
 
     }

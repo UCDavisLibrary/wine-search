@@ -12,40 +12,76 @@
       }
 
       .root {
+        padding-top: 10px;
         display : flex;
       }
 
       paper-material {
-        padding: 10px;
         margin: 10px;
+      }
+
+      .header {
+        padding: 10px 10px 20px 10px;
+        background-color: var(--medium-background-color);
+      }
+      .title {
+        text-align: center;
+        padding: 10px 0;
+        font-size: 24px;
+      }
+
+      .left {
+        background-color: white;
+        padding: 10px;
       }
 
       .content {
         padding: 0 15px;
         flex: 1;
       }
+
+      wine-search-filter-panel {
+        border-top: 1px solid var(--light-background-color);
+      }
+
+      .filter-label {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px;
+      }
     </style>
 
-    <wine-search-text-input></wine-search-text-input>
 
-    <div class="root">
-      <div class="left">
-        <!--<paper-range-slider></paper-range-slider>-->
-
-        <template is="dom-repeat" items="[[facetFilters]]">
-          <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
-        </template>
+    <div class="header center-content-outer">
+      <div class="center-content-inner">
+        <div class="title">Wine Search</div>
+        <wine-search-text-input></wine-search-text-input>
       </div>
-      <div class="content">
-        <wine-search-pagination>
-          <span>Showing [[start]] to [[stop]] of [[total]]</span>
-        </wine-search-pagination>
+    </div>
 
-        <template is="dom-repeat" items="[[results]]">
-          <paper-material style="background: white;">
-            <wine-search-result result="[[item]]"></wine-search-result>
-          </paper-material>
-        </template>
+    <div class="center-content-outer">
+      <div class="root center-content-inner">
+        <div class="left">
+          <div class="filter-label">Sort Order</div>
+          <wine-search-sort-order></wine-search-sort-order>
+
+          <div class="filter-label">Filters</div>
+          <template is="dom-repeat" items="[[facetFilters]]">
+            <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
+          </template>
+        </div>
+
+        <div class="content">
+          <wine-search-pagination>
+            <span style="font-style: italic">Showing [[start]] to [[stop]] of [[total]]</span>
+          </wine-search-pagination>
+
+          <template is="dom-repeat" items="[[results]]">
+            <paper-material style="background: white;">
+              <wine-search-result result="[[item]]"></wine-search-result>
+            </paper-material>
+          </template>
+        </div>
       </div>
     </div>
 

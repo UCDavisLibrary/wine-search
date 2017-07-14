@@ -1,0 +1,70 @@
+
+<dom-module id="wine-search-sort-order">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      .option {
+        cursor: pointer;
+        padding: 8px 13px;
+        border-bottom: 1px solid var(--medium-background-color);
+      }
+      .option:hover {
+        background-color: var(--light-background-color);
+        color: var(--default-primary-color);
+      }
+
+      cork-popup-button {
+        display: block;
+      }
+    </style>
+
+    <cork-popup-button label="[[sort]]" id="btn">
+      <template is="dom-repeat" items="[[options]]">
+        <div class="option" on-click="_select">[[item]]</div>
+      </template>
+    </cork-popup-button>
+
+  </template>
+
+  <script>
+    class WineSearchSortOrder extends Polymer.Element {
+
+      static get is() { return 'wine-search-sort-order'; }
+
+      static get properties() {
+        return {
+          sort : {
+            type : String,
+            value : 'Relevance'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+        this.options = [
+          'Relevance',
+          'Alphabetical',
+          'Vintage: Chronological',
+          'Vintage: Reverse Chronological',
+          'Published: Chronological',
+          'Published: Reverse Chronological',
+          'Price: Low to High',
+          'Price: High to Low'
+        ]
+      }
+
+      _select(e) {
+        this.$.btn.toggle();
+        this.sort = e.currentTarget.innerHTML;
+        // trigger search
+
+      }
+    }
+
+    window.customElements.define(WineSearchSortOrder.is, WineSearchSortOrder);
+  </script>
+</dom-module>
