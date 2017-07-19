@@ -1,0 +1,74 @@
+<script>
+
+  const SearchMixin = subclass =>
+
+  class SearchInterface extends subclass {
+    
+      get bind() {
+        return Object.assign(super.bind, 
+          {
+            'search-update' : '_onSearchUpdate',
+            'default-search-update' : '_onDefaultSearchUpdate',
+            'suggest-update' : '_onSuggestUpdate'
+          }
+        );
+      }
+
+      ready() {
+        super.ready();
+        this._getSearch().then((state) => this._onSearchUpdate(state));
+      }
+
+      _search(body) {
+        return this.emit('SearchModel.search', body);
+      }
+
+      _getSearch() {
+        return this.emit('SearchModel.getSearch');
+      }
+
+      _getDefaultSearch() {
+        return this.emit('SearchModel.getDefaultSearch');
+      }
+
+      _setSort(key = '', order = '', exec = true) {
+        return this.emit('SearchModel.setSort', key, order, exec);
+      }
+
+      _removeSearchRangeFilter(key, exec = true) {
+        return this.emit('SearchModel.removeRangeFilter', key, exec);
+      }
+
+      _addSearchRangeFilter(key, range, exec = true) {
+        return this.emit('SearchModel.addRangeFilter', key, range, exec);
+      }
+
+      _appendSearchFilter(key, value, exec = true) {
+        return this.emit('SearchModel.appendFilter', key, value, exec);
+      }
+
+      _removeSearchFilter(key, value, exec = true) {
+        return this.emit('SearchModel.removeFilter', key, value, exec);
+      }
+
+      _suggest(text, exec = true) {
+        return this.emit('SearchModel.suggest', text, exec);
+      }
+
+      _textSearch(text, options) {
+        return this.emit('SearchModel.textSearch', text, options);
+      }
+
+      _setSearchPaging(from, size, exec = true) {
+        return this.emit('SearchModel.setPaging', from, size, exec);
+      }
+
+      _onSearchUpdate(e) {
+        // implement me
+      }
+
+      _onDefaultSearchUpdate(e) {}
+
+      _onSuggestUpdate(e) {}
+  }
+</script>

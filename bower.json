@@ -26,6 +26,8 @@
     "cork-pagination": "cork-elements/cork-pagination",
     "cork-search-box": "cork-elements/cork-search-box",
     "cork-popup-button": "cork-elements/cork-popup-button",
-    "iron-image": "PolymerElements/iron-image#^2.1.2"
+    "iron-image": "PolymerElements/iron-image#^2.1.2",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
+    "cork-common-utils": "cork-elements/cork-common-utils"
   }
 }

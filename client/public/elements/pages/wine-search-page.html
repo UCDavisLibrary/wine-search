@@ -18,6 +18,7 @@
 
       paper-material {
         margin: 10px;
+        display: block;
       }
 
       .header {
@@ -88,7 +89,9 @@
   </template>
 
   <script>
-    class WineSearchPage extends AppSearchElement {
+    class WineSearchPage extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin, ConfigMixin) {
 
       static get is() { return 'wine-search-page'; }
 
@@ -121,40 +124,38 @@
         };
       }
 
-      ready() {
-        super.ready();
-
+      _onConfigUpdate(config) {
         var filters = [];
-        for( var key in App.config.facets ) {
+        
+        for( var key in config.facets ) {
           filters.push({
-            label : App.config.facets[key].label,
-            type : App.config.facets[key].type,
-            isDollar : App.config.facets[key].isDollar,
+            label : config.facets[key].label,
+            type : config.facets[key].type,
+            isDollar : config.facets[key].isDollar,
             filter : key
           });
         }
+        
         this.facetFilters = filters;
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this.search();
+      ready() {
+        super.ready();
+        this._getDefaultSearch().then((e) => this._onSearchUpdate(e));
       }
 
-      search() {
-        this.ebEmit('search-request', {
-          body : {}
-        });
+      _onDefaultSearchUpdate(e) {
+        this._onSearchUpdate(e);
       }
 
-      onSearchUpdate(e) {
+      _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        this.start = (e.body.from === 0 ) ? 1 : e.body.from;
-        this.stop = (e.body.from + e.body.size > e.response.hits.total) ? e.response.hits.total : e.body.from + e.body.size;
-        this.total = e.response.hits.total;
+        this.start = (e.request.from === 0 ) ? 1 : e.request.from;
+        this.stop = (e.request.from + e.request.size > e.payload.hits.total) ? e.payload.hits.total : e.request.from + e.request.size;
+        this.total = e.payload.hits.total;
 
-        this.results = e.response.hits.hits.map((item) => item._source);
+        this.results = e.payload.hits.hits.map((item) => item._source);
       }
 
     }

@@ -30,7 +30,9 @@
   </template>
 
   <script>
-    class WineSearchRangeFilter extends AppSearchElement {
+    class WineSearchRangeFilter extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin) {
 
       static get is() { return 'wine-search-range-filter'; }
 
@@ -67,11 +69,20 @@
         };
       }
 
-      onSearchUpdate(e) {
+      ready() {
+        super.ready();
+        this._getDefaultSearch().then(e => this._onSearchUpdate(e));
+      }
+
+      _onDefaultSearchUpdate(e) {
+        this._onSearchUpdate(e);
+      }
+
+      _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        this.activeRangeMin = e.response.aggregations[this.filter+'-min'].value || 0;
-        this.activeRangeMax = e.response.aggregations[this.filter+'-max'].value || 0;
+        this.activeRangeMin = e.payload.aggregations[this.filter+'-min'].value || 0;
+        this.activeRangeMax = e.payload.aggregations[this.filter+'-max'].value || 0;
 
         if( this.isDollar ) {
           this.$.min.label = 'Min $'+this.activeRangeMin.toFixed(2);
@@ -89,11 +100,13 @@
         if( this.$.min.value ) range.min = parseFloat(this.$.min.value);
         if( this.$.max.value ) range.max = parseFloat(this.$.max.value);
 
-        this.ebEmit('add-search-range-filter', {
-          key : this.filter,
-          range : range,
-          exec : true
-        });
+        if( range.min || range.max ) {
+          this._addSearchRangeFilter(this.filter, range);
+        } else {
+          this._removeSearchRangeFilter(this.filter);
+        }
+
+        
       }
 
     }

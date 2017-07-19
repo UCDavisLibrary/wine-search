@@ -23,14 +23,16 @@
 
     <cork-popup-button label="[[sort]]" id="btn">
       <template is="dom-repeat" items="[[options]]">
-        <div class="option" on-click="_select">[[item]]</div>
+        <div class="option" on-click="_select" index$="[[index]]">[[item.label]]</div>
       </template>
     </cork-popup-button>
 
   </template>
 
   <script>
-    class WineSearchSortOrder extends Polymer.Element {
+    class WineSearchSortOrder extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin) {
 
       static get is() { return 'wine-search-sort-order'; }
 
@@ -46,22 +48,69 @@
       constructor() {
         super();
         this.options = [
-          'Relevance',
-          'Alphabetical',
-          'Vintage: Chronological',
-          'Vintage: Reverse Chronological',
-          'Published: Chronological',
-          'Published: Reverse Chronological',
-          'Price: Low to High',
-          'Price: High to Low'
+          {
+            label : 'Relevance'
+          },
+          { 
+            label : 'Alphabetical',
+            sort : {
+              key : 'name.raw',
+              order : 'asc'
+            }
+          },
+          {
+            label : 'Vintage: Chronological',
+            sort : {
+              key : 'vintage',
+              order : 'asc'
+            }
+          },
+          {
+            label : 'Vintage: Reverse Chronological',
+            sort : {
+              key : 'vintage',
+              order : 'desc'
+            }
+          },
+          {
+            label : 'Published: Chronological',
+            sort : {
+              key : 'publication_date',
+              order : 'asc'
+            }
+          },
+          {
+            label : 'Published: Reverse Chronological',
+            sort : {
+              key : 'publication_date',
+              order : 'desc'
+            }
+          },
+          {
+            label : 'Price: Low to High',
+            sort : {
+              key : 'perprice',
+              order : 'asc'
+            }
+          },
+          {
+            label : 'Price: High to Low',
+            sort : {
+              key : 'perprice',
+              order : 'desc'
+            }
+          }
         ]
       }
 
       _select(e) {
         this.$.btn.toggle();
         this.sort = e.currentTarget.innerHTML;
-        // trigger search
+        
+        var sort = this.options[parseInt(e.currentTarget.getAttribute('index'))].sort;
 
+        if( !sort ) this._setSort();
+        else this._setSort(sort.key, sort.order);
       }
     }
 

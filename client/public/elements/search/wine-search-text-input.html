@@ -67,7 +67,9 @@
   </template>
 
   <script>
-    class WineSearchTextInput extends AppSearchElement {
+    class WineSearchTextInput extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin) {
 
       static get is() { return 'wine-search-text-input'; }
 
@@ -80,15 +82,6 @@
             }
           }
         };
-      }
-
-      get ebBind() {
-        return Object.assign(
-          super.ebBind,
-          {
-            'suggest-request-update' : 'onSuggestUpdate'
-          }
-        )
       }
 
       get SUGGEST_KEY() {
@@ -109,13 +102,9 @@
       }
 
       search() {
-        this.ebEmit('text-search', {
-          text : this.$.input.value,
-          options : {
-            exec : true
-          }
+        this._textSearch(this.$.input.value, {
+          exec : true
         });
-        this.$.input.value;
       }
 
       _useSuggestion(e) {
@@ -155,10 +144,7 @@
           return;
         }
 
-        this.ebEmit('suggest-request', {
-          text : suggestOn,
-          exec : true
-        });
+        this._suggest(suggestOn);
       }
 
       _cancelHide(e) {
@@ -166,10 +152,10 @@
         e.stopPropagation();
       }
 
-      onSuggestUpdate(e) {
+      _onSuggestUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        var resp = e.response;
+        var resp = e.payload;
 
         this.suggestions = [];
 
@@ -177,9 +163,9 @@
         if( !resp.suggest[this.SUGGEST_KEY] ) return;
         if( !resp.suggest[this.SUGGEST_KEY][0] ) return;
 
-        var currentValue = e.body.suggest[this.SUGGEST_KEY].prefix.toLowerCase();
+        var currentValue = e.request.suggest[this.SUGGEST_KEY].prefix.toLowerCase();
         this.suggestions = resp
-                            .suggest[this.SUGGEST_KEY][0]
+                            .payload[this.SUGGEST_KEY][0]
                             .options
                             .map((item) => item.text)
                             .reduce((arr, val) => {
@@ -191,7 +177,7 @@
                             }, []);
       }
 
-      onSearchUpdate(e) {
+      _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
         this.suggestions = [];
       }

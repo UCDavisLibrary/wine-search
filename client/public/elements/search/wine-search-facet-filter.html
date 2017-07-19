@@ -45,26 +45,21 @@
         color: var(--default-primary-color);
         background: #ccc;
       }
+
+      .count {
+        color: var(--secondary-text-color);
+        float: right;
+      }
     </style>
 
-    <cork-toggle-panel label="[[label]]">
-      <div style="margin-bottom: 15px" hidden="[[!activeFilters.length]]">
-        <template is="dom-repeat" items="[[activeFilters]]">
-          <div>
-            <div style="display:inline-block">
-              <a class="active-filter" on-click="removeFilter" index$="[[index]]">
-                <iron-icon icon="cancel"></iron-icon>
-                <span>[[item]]</span>
-              </a>
-            </div>
-          </div>
-        </template>
-      </div>
-      
+    <cork-toggle-panel label="[[label]]">      
       <div>
         <template is="dom-repeat" items="[[buckets]]">
           <div class="filter">
-            <a on-click="appendFilter" index$="[[index]]">[[item.key]] <span>([[item.doc_count]])</span></a>
+            
+            <paper-checkbox noink index$="[[index]]" checked$="[[item.active]]" on-change="_toggleFilter"></paper-checkbox>
+            <span class="key">[[item.key]]</span> 
+            <span class="count">[[item.doc_count]]</span>
           </div>
         </template>
       </div>
@@ -74,7 +69,9 @@
   </template>
 
   <script>
-    class WineSearchFacetFilter extends AppSearchElement {
+    class WineSearchFacetFilter extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin) {
 
       static get is() { return 'wine-search-facet-filter'; }
 
@@ -95,62 +92,58 @@
           activeFilters : {
             type : Array,
             value : []
+          },
+          allFilters : {
+            type : Array,
+            value : null
           }
         };
       }
 
-      onSearchUpdate(e) {
+      ready() {
+        super.ready();
+        this._getDefaultSearch().then(e => this._onDefaultSearchUpdate(e));
+      }
+
+      _onDefaultSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
-
-        var query = e.body.query;
+        this.buckets = e.payload.aggregations[this.filter].buckets;
+      }
+      
+      _onSearchUpdate(e) {
+        if( e.state !== 'loaded' ) return;
+        var query = e.payload.query;
         var activeFilters = [];
-        if( query && 
-            query.bool && 
-            query.bool.filter ) {
+
+        // if( query && 
+        //     query.bool && 
+        //     query.bool.filter ) {
           
-          var arr = query.bool.filter;
+        //   var arr = query.bool.filter;
 
-          for( var i = 0; i < arr.length; i++ ) {
-            if( arr[i].terms[this.filter] ) {
-              activeFilters = arr[i].terms[this.filter];
-            }
-          }
-        }
-        this.activeFilters = activeFilters;
+        //   for( var i = 0; i < arr.length; i++ ) {
+        //     if( arr[i].terms[this.filter] ) {
+        //       activeFilters = arr[i].terms[this.filter];
+        //     }
+        //   }
+        // }
 
-        this.buckets = e
-                        .response
-                        .aggregations[this.filter]
-                        .buckets
-                        .filter((bucket) => {
-                          if( this.activeFilters.indexOf(bucket.key) > -1 ) return false;
-                          return true;
-                        });
-                        
-        if( this.activeFilters.length === 0 &&
-            this.buckets.length === 0 ) {
-          this.style.display = 'none';
-        } else {
-          this.style.display = 'block';
-        }
+        
+      }
+
+      _toggleFilter(e) {
+        if( e.currentTarget.active ) this.appendFilter(e);
+        else this.removeFilter(e);
       }
 
       appendFilter(e) {
         var item = this.buckets[parseInt(e.currentTarget.getAttribute('index'))];
-        this.ebEmit('append-search-filter', {
-          key : this.filter,
-          value : item.key,
-          exec : true
-        });
+        this._appendSearchFilter(this.filter, item.key);
       }
 
       removeFilter(e) {
-        var item = this.activeFilters[parseInt(e.currentTarget.getAttribute('index'))];
-        this.ebEmit('remove-search-filter', {
-          key : this.filter,
-          value : item,
-          exec : true
-        });
+        var item = this.buckets[parseInt(e.currentTarget.getAttribute('index'))];
+        this._removeSearchFilter(this.filter, item.key);
       }
 
 

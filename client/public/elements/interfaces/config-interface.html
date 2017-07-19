@@ -1,0 +1,26 @@
+<script>
+
+  const ConfigMixin = subclass =>
+
+  class ConfigInterface extends subclass {
+    
+      get bind() {
+        return Object.assign(super.bind, 
+          {}
+        );
+      }
+
+      ready() {
+        super.ready();
+        this._getConfig().then((state) => this._onConfigUpdate(state));
+      }
+
+      _getConfig() {
+        return this.emit('ConfigModel.get');
+      }
+
+      _onConfigUpdate(e) {
+        // implement me
+      }
+  }
+</script>

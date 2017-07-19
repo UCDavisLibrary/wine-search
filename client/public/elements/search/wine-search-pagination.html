@@ -31,7 +31,9 @@
   </template>
 
   <script>
-    class WineSearchPagination extends AppSearchElement {
+    class WineSearchPagination extends 
+        Mixin(Polymer.Element)
+        .with(EventMixin, SearchMixin) {
 
       static get is() { return 'wine-search-pagination'; }
 
@@ -56,13 +58,13 @@
         }
       }
 
-      onSearchUpdate(e) {
+      _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        this.start = e.body.from;
-        this.itemsPerPage = e.body.size;
+        this.start = e.request.from;
+        this.itemsPerPage = e.request.size;
         
-        var total = e.response.hits.total;
+        var total = e.payload.hits.total;
 
         this.backEnabled = (this.start === 0) ? false : true;
         this.forwardEnabled = (this.start + this.itemsPerPage < total ) ? true : false;
@@ -71,18 +73,13 @@
       back() {
         var from = this.start - this.itemsPerPage;
         if( from < 0 ) from = 0;
-        this.ebEmit('set-search-paging', {
-          from : from,
-          exec : true
-        });
+
+        this._setSearchPaging(from);
       }
 
       forward() {
         var from = this.start + this.itemsPerPage;
-        this.ebEmit('set-search-paging', {
-          from : from,
-          exec : true
-        });
+        this._setSearchPaging(from);
       }
 
     }

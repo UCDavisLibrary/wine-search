@@ -8,7 +8,7 @@
     <style include="shared-styles"></style>
     <style>
       :host {
-        display: block
+        display: block;
       }
       
       .bold {
@@ -33,18 +33,13 @@
       }
       
       .publisher {
-        position: absolute;
         z-index: 1;
-        bottom: 0;
-        left: 0;
-        right: 0;
         padding: 10px;
         background: var(--medium-background-color);
       }
 
       iron-image {
         width : 175px; 
-        height : 225px; 
         background-color: var(--dark-background-color);
       }
 
@@ -77,7 +72,7 @@
         </div>
 
         <a href$="[[editUrl]]" target="_blank"><iron-icon icon="open-in-new"></iron-icon></a>
-        <div class="publisher" style="flex:1">
+        <div class="publisher" style="flex:1; margin-top:10px">
           <div>Published [[result.publication_date]] [[result.publisher]]</div>
           <div>[[result.title]]</div>
         </div>
@@ -88,7 +83,7 @@
   </template>
 
   <script>
-    class WineSearchResult extends AppBaseElement {
+    class WineSearchResult extends Polymer.Element {
 
       static get is() { return 'wine-search-result'; }
 
@@ -120,11 +115,11 @@
       }
 
       _price(result) {
-        return result.perprice.toFixed(2);
+        return (result.perprice || 0).toFixed(2);
       }
 
       _price2017(result) {
-        return result.perprice2017.toFixed(2);
+        return (result.perprice2017 || 0).toFixed(2);
       }
 
       _editUrl(result) {

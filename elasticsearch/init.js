@@ -1,7 +1,7 @@
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
   host: 'http://elastic:changeme@elasticsearch:9200',
-  log: 'trace'
+  log: 'error'
 });
 
 var index = 'wine-search';
