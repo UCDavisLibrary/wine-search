@@ -52,7 +52,7 @@
     </style>
 
     <div style="display: flex; justify-content: center">
-      <cork-search-box></cork-search-box>
+      <cork-search-box id="input" on-clear="search" on-search="search"></cork-search-box>
     </div>
 
     <!--<paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
@@ -98,7 +98,7 @@
 
       _onKeyUp(e) {
         if( e.which === 13 ) this.search();
-        else this.bufferSuggest();
+        // else this.bufferSuggest();
       }
 
       search() {

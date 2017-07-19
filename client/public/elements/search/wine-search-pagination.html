@@ -58,6 +58,15 @@
         }
       }
 
+      ready() {
+        super.ready();
+        this._getDefaultSearch().then((e) => this._onSearchUpdate(e));
+      }
+
+      _onDefaultSearchUpdate(e) {
+        this._onSearchUpdate(e);
+      }
+
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
