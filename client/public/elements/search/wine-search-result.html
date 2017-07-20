@@ -43,11 +43,18 @@
         background-color: var(--dark-background-color);
       }
 
-
-
       h2 {
         margin: 10px;
         border-bottom: 1px solid var(--medium-background-color);
+      }
+
+      .detail-line {
+        display: flex;
+        align-items: center;
+      }
+
+      flag-icon {
+        margin: 3px 5px 0 0;
       }
 
     </style>
@@ -66,7 +73,9 @@
           </div>
           <div style="flex:1">
             <div>[[result.color]] [[result.winetype]]</div>
-            <div>[[result.country]]</div>
+            <div class="detail-line">
+              <flag-icon country="[[result.country]]"></flag-icon> [[result.country]]
+            </div>
             <div>[[result.bottletype]]</div>
           </div>
         </div>

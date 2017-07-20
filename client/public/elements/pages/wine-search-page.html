@@ -56,7 +56,7 @@
         padding: 10px;
       }
 
-      paper-button#clear {
+      paper-button[clear] {
         color: var(--default-primary-color);
         font-size: 12px;
         font-style: italic;
@@ -99,7 +99,7 @@
 
           <div class="filter-label" style="display:flex; align-items: center">
             <div style="flex:1">Filters</div> 
-            <paper-button id="clear" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
+            <paper-button clear id="clear1" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
           </div>
           <template is="dom-repeat" items="[[facetFilters]]">
             <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
@@ -112,11 +112,11 @@
               <wine-search-sort-order></wine-search-sort-order>
             </div>
             <div style="flex:1; padding-left: 10px">
-              <cork-popup-button label="Filters" style="display:block">
+              <cork-popup-button label="Refine Results" style="display:block">
                 <div style="padding: 10px">
                   <div class="filter-label" style="display:flex; align-items: center">
-                    <div style="flex:1">Refine Results</div> 
-                    <paper-button id="clear" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
+                    <div style="flex:1">Filters</div> 
+                    <paper-button clear id="clear2" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
                   </div>
                   <template is="dom-repeat" items="[[facetFilters]]">
                     <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
@@ -210,8 +210,13 @@
 
         this.results = e.payload.hits.hits.map((item) => item._source);
 
-        if( e.request.query ) this.$.clear.style.display = 'inline-block';
-        else this.$.clear.style.display = 'none';
+        if( e.request.query ) {
+          this.$.clear1.style.display = 'inline-block';
+          this.$.clear2.style.display = 'inline-block';
+        } else {
+          this.$.clear1.style.display = 'none';
+          this.$.clear2.style.display = 'none';
+        }
       }
 
     }

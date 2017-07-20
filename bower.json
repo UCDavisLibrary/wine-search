@@ -30,6 +30,7 @@
     "cork-common-utils": "cork-elements/cork-common-utils",
     "cork-typeahead": "cork-elements/cork-typeahead",
     "iron-media-query": "^2.0.0",
-    "cork-popup-button": "cork-elements/cork-popup-button"
+    "cork-popup-button": "cork-elements/cork-popup-button",
+    "flag-icon-css": "^2.8.0"
   }
 }

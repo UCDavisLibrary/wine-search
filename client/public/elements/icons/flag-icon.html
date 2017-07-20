@@ -1,0 +1,133 @@
+
+<dom-module id="flag-icon">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+    </style>
+  </template>
+
+  <script>
+    class FlagIcon extends Polymer.Element {
+
+      static get is() { return 'flag-icon'; }
+
+      static get properties() {
+        return {
+          country : {
+            type : String,
+            value : '',
+            observer : '_onCountryChange'
+          },
+          supportedCountry : {
+            type : Boolean,
+            value : false,
+            notify : true
+          }
+        };
+      }
+
+      constructor() {
+        super();
+
+        this.thesaurus = {
+          england : 'gb'
+        }
+
+        this.iconNames = ["ad","bh","ck","er","gl","io","lc","mq","om","sb","tf","vc",
+        "ae","bi","cl","es","gm","iq","li","mr","pa","sc","tg","ve","af","bj","cm","et",
+        "gn","ir","lk","ms","pe","sd","th","vg","ag","bl","cn","eu","gp","is","lr","mt",
+        "pf","se","tj","vi","ai","bm","co","fi","gq","it","ls","mu","pg","sg","tk","vn",
+        "al","bn","cr","fj","gr","je","lt","mv","ph","sh","tl","vu","am","bo","cu","fk",
+        "gs","jm","lu","mw","pk","si","tm","wf","ao","bq","cv","fm","gt","jo","lv","mx",
+        "pl","sj","tn","ws","aq","br","cw","fo","gu","jp","ly","my","pm","sk","to","ye",
+        "ar","bs","cx","fr","gw","ke","ma","mz","pn","sl","tr","yt","as","bt","cy","ga",
+        "gy","kg","mc","na","pr","sm","tt","za","at","bv","cz","gb-eng","hk","kh","md",
+        "nc","ps","sn","tv","zm","au","bw","de","gb-nir","hm","ki","me","ne","pt","so",
+        "tw","zw","aw","by","dj","gb-sct","hn","km","mf","nf","pw","sr","tz","ax","bz",
+        "dk","gb-wls","hr","kn","mg","ng","py","ss","ua","az","ca","dm","gb","ht","kp",
+        "mh","ni","qa","st","ug","ba","cc","do","gd","hu","kr","mk","nl","re","sv","um",
+        "bb","cd","dz","ge","id","kw","ml","no","ro","sx","un","bd","cf","ec","gf","ie",
+        "ky","mm","np","rs","sy","us","be","cg","ee","gg","il","kz","mn","nr","ru","sz",
+        "uy","bf","ch","eg","gh","im","la","mo","nu","rw","tc","uz","bg","ci","eh","gi",
+        "in","lb","mp","nz","sa","td","va"];
+
+        this.codeMap = {"afghanistan":"af","ålandislands":"ax","albania":"al","algeria":"dz",
+        "americansamoa":"as","andorra":"ad","angola":"ao","anguilla":"ai","antarctica":"aq",
+        "antiguaandbarbuda":"ag","argentina":"ar","armenia":"am","aruba":"aw","australia":"au",
+        "austria":"at","azerbaijan":"az","bahamas":"bs","bahrain":"bh","bangladesh":"bd",
+        "barbados":"bb","belarus":"by","belgium":"be","belize":"bz","benin":"bj","bermuda":
+        "bm","bhutan":"bt","bolivia":"bo","bosniaandherzegovina":"ba","botswana":"bw",
+        "bouvetisland":"bv","brazil":"br","britishindianoceanterritory":"io","bruneidarussalam":
+        "bn","bulgaria":"bg","burkinafaso":"bf","burundi":"bi","cambodia":"kh","cameroon":"cm",
+        "canada":"ca","capeverde":"cv","caymanislands":"ky","centralafricanrepublic":"cf",
+        "chad":"td","chile":"cl","china":"cn","christmasisland":"cx","cocos(keeling)islands":"cc",
+        "colombia":"co","comoros":"km","congo":"cg","congo,thedemocraticrepublicofthe":"cd",
+        "cookislands":"ck","costarica":"cr","coted'ivoire":"ci","croatia":"hr","cuba":"cu",
+        "cyprus":"cy","czechrepublic":"cz","denmark":"dk","djibouti":"dj","dominica":"dm",
+        "dominicanrepublic":"do","ecuador":"ec","egypt":"eg","elsalvador":"sv","equatorialguinea":"gq",
+        "eritrea":"er","estonia":"ee","ethiopia":"et","falklandislands(malvinas)":"fk","faroeislands":"fo"
+        ,"fiji":"fj","finland":"fi","france":"fr","frenchguiana":"gf","frenchpolynesia":"pf",
+        "frenchsouthernterritories":"tf","gabon":"ga","gambia":"gm","georgia":"ge","germany":"de",
+        "ghana":"gh","gibraltar":"gi","greece":"gr","greenland":"gl","grenada":"gd","guadeloupe":"gp",
+        "guam":"gu","guatemala":"gt","guernsey":"gg","guinea":"gn","guinea-bissau":"gw","guyana":"gy",
+        "haiti":"ht","heardislandandmcdonaldislands":"hm","holysee(vaticancitystate)":"va","honduras":"hn",
+        "hongkong":"hk","hungary":"hu","iceland":"is","india":"in","indonesia":"id","iran,islamicrepublicof":"ir",
+        "iraq":"iq","ireland":"ie","isleofman":"im","israel":"il","italy":"it","jamaica":"jm","japan":"jp",
+        "jersey":"je","jordan":"jo","kazakhstan":"kz","kenya":"ke","kiribati":"ki",
+        "korea,democraticpeople'srepublicof":"kp","korea,republicof":"kr","kuwait":"kw",
+        "kyrgyzstan":"kg","laopeople'sdemocraticrepublic":"la","latvia":"lv","lebanon":"lb",
+        "lesotho":"ls","liberia":"lr","libyanarabjamahiriya":"ly","liechtenstein":"li","lithuania":"lt",
+        "luxembourg":"lu","macao":"mo","macedonia,theformeryugoslavrepublicof":"mk","madagascar":"mg",
+        "malawi":"mw","malaysia":"my","maldives":"mv","mali":"ml","malta":"mt","marshallislands":"mh",
+        "martinique":"mq","mauritania":"mr","mauritius":"mu","mayotte":"yt","mexico":"mx",
+        "micronesia,federatedstatesof":"fm","moldova,republicof":"md","monaco":"mc","mongolia":"mn",
+        "montserrat":"ms","morocco":"ma","mozambique":"mz","myanmar":"mm","namibia":"na","nauru":"nr",
+        "nepal":"np","netherlands":"nl","netherlandsantilles":"an","newcaledonia":"nc","newzealand":"nz",
+        "nicaragua":"ni","niger":"ne","nigeria":"ng","niue":"nu","norfolkisland":"nf",
+        "northernmarianaislands":"mp","norway":"no","oman":"om","pakistan":"pk","palau":"pw",
+        "palestinianterritory,occupied":"ps","panama":"pa","papuanewguinea":"pg","paraguay":"py",
+        "peru":"pe","philippines":"ph","pitcairn":"pn","poland":"pl","portugal":"pt","puertorico":"pr",
+        "qatar":"qa","reunion":"re","romania":"ro","russianfederation":"ru","rwanda":"rw","sainthelena":"sh",
+        "saintkittsandnevis":"kn","saintlucia":"lc","saintpierreandmiquelon":"pm",
+        "saintvincentandthegrenadines":"vc","samoa":"ws","sanmarino":"sm","saotomeandprincipe":"st",
+        "saudiarabia":"sa","senegal":"sn","serbiaandmontenegro":"cs","seychelles":"sc","sierraleone":"sl",
+        "singapore":"sg","slovakia":"sk","slovenia":"si","solomonislands":"sb","somalia":"so","southafrica":"za",
+        "southgeorgiaandthesouthsandwichislands":"gs","spain":"es","srilanka":"lk","sudan":"sd","suriname":"sr",
+        "svalbardandjanmayen":"sj","swaziland":"sz","sweden":"se","switzerland":"ch","syrianarabrepublic":"sy",
+        "taiwan,provinceofchina":"tw","tajikistan":"tj","tanzania,unitedrepublicof":"tz","thailand":"th",
+        "timor-leste":"tl","togo":"tg","tokelau":"tk","tonga":"to","trinidadandtobago":"tt","tunisia":"tn",
+        "turkey":"tr","turkmenistan":"tm","turksandcaicosislands":"tc","tuvalu":"tv","uganda":"ug","ukraine":"ua",
+        "unitedarabemirates":"ae","unitedkingdom":"gb","unitedstates":"us","unitedstatesminoroutlyingislands":"um",
+        "uruguay":"uy","uzbekistan":"uz","vanuatu":"vu","venezuela":"ve","vietnam":"vn","virginislands,british":"vg",
+        "virginislands,u.s.":"vi","wallisandfutuna":"wf","westernsahara":"eh","yemen":"ye","zambia":"zm","zimbabwe":"zw"}
+      }
+
+      _onCountryChange() {
+        var name = this.country.toLowerCase().replace(/\s/,'');
+
+        if( this.codeMap[name] ) {
+          name = this.codeMap[name];
+        } else if( this.thesaurus[name] ) {
+          name = this.thesaurus[name];
+        } else if( this.iconNames.indexOf(name.substring(0, 2)) > -1 ) {
+          name = name.substring(0, 2);
+        } else {
+          name = '';
+        }
+
+        if( name ) {
+          this.shadowRoot.innerHTML = `<img src="/images/flags/${name}.svg" style="width:20px" />`;
+          this.supportedCountry = true;
+        } else {
+          this.shadowRoot.innerHTML = '';
+          this.supportedCountry = true;
+        }
+      }
+
+    }
+
+    window.customElements.define(FlagIcon.is, FlagIcon);
+  </script>
+</dom-module>

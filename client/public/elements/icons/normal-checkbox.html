@@ -1,0 +1,49 @@
+<dom-module id="normal-checkbox">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      paper-checkbox[checked] .value {
+        color: var(--default-primary-color);
+        font-weight: bold;
+      }
+    </style>
+
+    <paper-checkbox noink checked="{{checked}}">
+      <span class="value">[[value]]</span>
+    </paper-checkbox>
+
+  </template>
+
+  <script>
+    class NormalCheckbox extends Polymer.Element {
+
+      static get is() { return 'normal-checkbox'; }
+
+      static get properties() {
+        return {
+          value : {
+            type : String,
+            value : ''
+          },
+          checked : {
+            type : Boolean,
+            value : false,
+            notify: true,
+            reflectToAttribute : true
+            // observer : '_onChange'
+          }
+        };
+      }
+
+      // _onChange() {
+      //   debugger;
+      // }
+
+    }
+
+    window.customElements.define(NormalCheckbox.is, NormalCheckbox);
+  </script>
+</dom-module>

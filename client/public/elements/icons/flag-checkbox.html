@@ -1,0 +1,100 @@
+
+<dom-module id="flag-checkbox">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      #flag-root {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      flag-icon {
+        border: 2px solid transparent;
+        margin-top: 2px;    
+        line-height: 11px;
+        display: block;
+      }
+
+      flag-icon[checked] {
+        border: 2px solid var(--default-primary-color);
+      }
+
+      iron-icon[icon="check"] {
+        position: absolute;
+        bottom: -5px;
+        left: -8px;
+        color: #888;
+      }
+
+      #label {
+        padding-left: 10px;
+      }
+
+      #label[checked] {
+        font-weight: bold;
+        color: var(--default-primary-color);
+      }
+    </style>
+
+    <div id="flag-root" hidden$="[[!supportedCountry]]" on-click="toggle">
+      <div style="position: relative">
+        <flag-icon 
+          checked$="[[checked]]"
+          country$="[[value]]" 
+          supported-country="{{supportedCountry}}">
+        </flag-icon>
+        <iron-icon icon="check" hidden$="[[!checked]]"></iron-icon>
+      </div>
+      <div id="label" checked$="[[checked]]">[[value]]</div>
+    </div>
+
+    <div hidden$="[[supportedCountry]]">
+      <normal-checkbox value="[[value]]" checked$="{{checked}}"></normal-checkbox>
+    </div>
+
+  </template>
+
+  <script>
+    class FlagCheckbox extends Polymer.Element {
+
+      static get is() { return 'flag-checkbox'; }
+
+      static get properties() {
+        return {
+          checked : {
+            type : Boolean,
+            value : false,
+            notify : true,
+            reflectToAttribute : true
+          },
+          value : {
+            type : String,
+            value : ''
+          }
+        };
+      }
+
+      toggle() {
+        this.checked = !this.checked;
+
+        this.dispatchEvent(
+          new CustomEvent('change', {
+            composed: true,
+            bubbles: true, 
+            detail: {value: this.checked}
+          })
+        );
+      }
+
+
+
+    }
+
+    window.customElements.define(FlagCheckbox.is, FlagCheckbox);
+  </script>
+</dom-module>

@@ -66,10 +66,15 @@
       <div>
         <template is="dom-repeat" items="[[buckets]]">
           <div class="filter">
-            
-            <paper-checkbox noink index$="[[index]]" checked$="[[item.active]]" on-change="_toggleFilter">
-              <span class="key">[[item.key]]</span>
-            </paper-checkbox>
+
+            <wine-search-facet-checkbox
+              type$="[[label]]"
+              index$="[[index]]"
+              value$="[[item.key]]"
+              checked$="[[item.active]]" 
+              on-change="_toggleFilter">
+            </wine-search-facet-checkbox>
+
             <span class="count">[[item.doc_count]]</span>
           </div>
         </template>
@@ -146,7 +151,7 @@
       }
 
       _toggleFilter(e) {
-        if( e.currentTarget.active ) this.appendFilter(e);
+        if( e.currentTarget.checked ) this.appendFilter(e);
         else this.removeFilter(e);
       }
 
