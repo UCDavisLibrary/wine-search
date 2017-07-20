@@ -256,11 +256,12 @@ class SearchModel extends BaseModel {
       }
     }
 
+    this.jstore.setSuggestLoading(body);
     ServiceWrapper.call({
+      store : this.jstore,
       request : service.search(body),
-      onLoading : this.store.setSuggestLoading,
-      onComplete : this.store.setSuggestLoaded,
-      onError : this.store.setSuggestError
+      onSuccess : this.jstore.setSuggestLoaded,
+      onError : this.jstore.setSuggestError
     });
 
     return this.getSuggest();

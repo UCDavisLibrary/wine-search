@@ -36,8 +36,11 @@
         color: var(--secondary-text-color);
       }
 
-      cork-search-box {
+      cork-typeahead {
         width: 66%;
+      }
+
+      cork-search-box {
         --cork-search-box-btn: {
           background: var(--default-primary-color);
           color: white;
@@ -45,14 +48,16 @@
       }
 
       @media(max-width: 768px) {
-        cork-search-box {
+        cork-typeahead {
           width: 100%;
         }
       }
     </style>
 
     <div style="display: flex; justify-content: center">
-      <cork-search-box id="input" on-clear="search" on-search="search"></cork-search-box>
+      <cork-typeahead id="suggest" on-select="_useSuggestion">
+        <cork-search-box id="input" on-clear="search" on-search="search"></cork-search-box>
+      </cork-typeahead>
     </div>
 
     <!--<paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
@@ -73,16 +78,6 @@
 
       static get is() { return 'wine-search-text-input'; }
 
-      static get properties() {
-        return {
-          suggestions : {
-            type : Array,
-            value : function() {
-              return [];
-            }
-          }
-        };
-      }
 
       get SUGGEST_KEY() {
         return 'name-suggest'
@@ -91,9 +86,7 @@
       ready() {
         super.ready();
 
-        window.addEventListener('click', () => {
-          this.suggestions = [];
-        });
+        this.$.suggest.search = this.suggest.bind(this);
       }
 
       _onKeyUp(e) {
@@ -102,13 +95,14 @@
       }
 
       search() {
+        this.$.suggest.hide();
         this._textSearch(this.$.input.value, {
           exec : true
         });
       }
 
       _useSuggestion(e) {
-        var text = e.currentTarget.innerHTML;
+        var text = e.detail.value;
         var parts = this.$.input
           .value
           .split(' ')
@@ -119,32 +113,27 @@
         this.search();
       }
 
-      bufferSuggest() {
-        this._suggestDebouncer = Polymer.Debouncer.debounce(
-          this._suggestDebouncer, // initially undefined
-          Polymer.Async.timeOut.after(100),
-          this.suggest.bind(this)
-        );
-      }
+      // called from typeahead widget
+      suggest(value) {
+        return new Promise((resolve, reject) => {
+          var parts = (value || '')
+            .split(' ')
+            .filter(val => val.length ? true : false);
 
-      suggest() {
-        var parts = (this.$.input.value || '')
-          .split(' ')
-          .filter(val => val.length ? true : false);
+          if( parts.length === 0 ) {
+            return resolve([]);
+          }
 
-        if( parts.length === 0 ) {
-          this.suggestions = [];
-          return;
-        }
+          this.suggestOn = parts[parts.length-1];
 
-        var suggestOn = parts[parts.length-1];
+          if( this.suggestOn.length < 1 ) {
+            return resolve([]);
+          }
 
-        if( suggestOn.length < 1 ) {
-          this.suggestions = [];
-          return;
-        }
-
-        this._suggest(suggestOn);
+          this.resolveSuggest = resolve;
+          this._suggest(this.suggestOn);
+        });
+        
       }
 
       _cancelHide(e) {
@@ -154,27 +143,29 @@
 
       _onSuggestUpdate(e) {
         if( e.state !== 'loaded' ) return;
+        if( !this.resolveSuggest ) return;
 
         var resp = e.payload;
-
-        this.suggestions = [];
 
         if( !resp.suggest ) return;
         if( !resp.suggest[this.SUGGEST_KEY] ) return;
         if( !resp.suggest[this.SUGGEST_KEY][0] ) return;
 
         var currentValue = e.request.suggest[this.SUGGEST_KEY].prefix.toLowerCase();
-        this.suggestions = resp
-                            .payload[this.SUGGEST_KEY][0]
+        var suggestions = resp
+                            .suggest[this.SUGGEST_KEY][0]
                             .options
                             .map((item) => item.text)
                             .reduce((arr, val) => {
-                              if( arr.indexOf(val) === -1 && 
-                                  val.toLowerCase() !== currentValue ) {
+                              val = val.toLowerCase();
+                              if( arr.indexOf(val) === -1 && val !== currentValue ) {
                                 arr.push(val);
                               } 
                               return arr;
                             }, []);
+        
+        this.resolveSuggest({results: suggestions, valueUsed: this.suggestOn});
+        this.resolveSuggest = null;
       }
 
       _onSearchUpdate(e) {

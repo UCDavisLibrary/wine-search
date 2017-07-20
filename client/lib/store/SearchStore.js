@@ -108,7 +108,7 @@ class SearchStore {
   }
 
   setSuggestError(e) {
-    this._setSuggesthState({
+    this._setSuggestState({
       state: 'error',   
       request: this.data.suggest.request,
       error: e
