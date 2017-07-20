@@ -50,6 +50,12 @@
         font-weight: bold;
         padding: 10px;
       }
+
+      paper-button#clear {
+        color: var(--default-primary-color);
+        font-size: 12px;
+        padding : 0;
+      }
     </style>
 
 
@@ -66,7 +72,10 @@
           <div class="filter-label">Sort Order</div>
           <wine-search-sort-order></wine-search-sort-order>
 
-          <div class="filter-label">Filters</div>
+          <div class="filter-label" style="display:flex; align-items: center">
+            <div style="flex:1">Filters</div> 
+            <paper-button id="clear" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
+          </div>
           <template is="dom-repeat" items="[[facetFilters]]">
             <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
           </template>
@@ -156,6 +165,9 @@
         this.total = e.payload.hits.total;
 
         this.results = e.payload.hits.hits.map((item) => item._source);
+
+        if( e.request.query ) this.$.clear.style.display = 'inline-block';
+        else this.$.clear.style.display = 'none';
       }
 
     }

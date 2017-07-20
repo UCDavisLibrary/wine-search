@@ -135,6 +135,15 @@ class SearchModel extends BaseModel {
     if( exec ) this.search(this.getSearch().request);
   }
 
+  clearFilters() {
+    var body = this.getSearch().request;
+    if( body.query ) delete body.query;
+
+    this.setPaging(); // reset page
+    this.search(body);
+    return body;
+  }
+
   appendFilter(key, value, exec) {
     this.ensurePath('query.bool.filter', []);
     var body = this.getSearch().request;

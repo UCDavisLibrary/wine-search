@@ -93,6 +93,30 @@
         }
 
         this.firstLoad = false;
+
+        var value = {
+          min : '',
+          max : ''
+        };
+
+        var query = e.request.query;
+        if( query && 
+            query.bool && 
+            query.bool.must ) {
+          
+          var arr = query.bool.must;
+
+          for( var i = 0; i < arr.length; i++ ) {
+            if( arr[i].range && arr[i].range[this.filter] ) {
+              value.max = arr[i].range[this.filter].lte || '';
+              value.min = arr[i].range[this.filter].gte || '';
+              break;
+            }
+          }
+        }
+
+        this.$.min.value = value.min;
+        this.$.max.value = value.max;
       }
 
       setFilter() {

@@ -31,6 +31,10 @@
         return this.emit('SearchModel.getDefaultSearch');
       }
 
+      _clearSearchFilters() {
+        return this.emit('SearchModel.clearFilters');
+      }
+
       _setSort(key = '', order = '', exec = true) {
         return this.emit('SearchModel.setSort', key, order, exec);
       }

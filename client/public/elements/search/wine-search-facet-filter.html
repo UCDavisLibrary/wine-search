@@ -50,6 +50,16 @@
         color: var(--secondary-text-color);
         float: right;
       }
+
+      paper-checkbox[active] .key {
+        color: var(--default-primary-color);
+        font-weight: bold;
+      }
+
+      paper-checkbox[disabled] .key {
+        color: var(--secondary-text-color);
+        font-style: italic;
+      }
     </style>
 
     <cork-toggle-panel label="[[label]]">      
@@ -57,8 +67,9 @@
         <template is="dom-repeat" items="[[buckets]]">
           <div class="filter">
             
-            <paper-checkbox noink index$="[[index]]" checked$="[[item.active]]" on-change="_toggleFilter"></paper-checkbox>
-            <span class="key">[[item.key]]</span> 
+            <paper-checkbox noink index$="[[index]]" checked$="[[item.active]]" on-change="_toggleFilter">
+              <span class="key">[[item.key]]</span>
+            </paper-checkbox>
             <span class="count">[[item.doc_count]]</span>
           </div>
         </template>
@@ -112,23 +123,26 @@
       
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
-        var query = e.payload.query;
+        var query = e.request.query;
         var activeFilters = [];
 
-        // if( query && 
-        //     query.bool && 
-        //     query.bool.filter ) {
+        if( query && 
+            query.bool && 
+            query.bool.filter ) {
           
-        //   var arr = query.bool.filter;
+          var arr = query.bool.filter;
 
-        //   for( var i = 0; i < arr.length; i++ ) {
-        //     if( arr[i].terms[this.filter] ) {
-        //       activeFilters = arr[i].terms[this.filter];
-        //     }
-        //   }
-        // }
+          for( var i = 0; i < arr.length; i++ ) {
+            if( arr[i].terms[this.filter] ) {
+              activeFilters = arr[i].terms[this.filter];
+            }
+          }
+        }
 
-        
+        this.buckets = this.buckets.map(item => {
+          item.active = (activeFilters.indexOf(item.key) > -1) ? true : false;
+          return Object.assign({}, item);
+        });
       }
 
       _toggleFilter(e) {

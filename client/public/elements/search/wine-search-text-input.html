@@ -179,7 +179,23 @@
 
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
-        this.suggestions = [];
+        var query = e.request.query;
+
+        var value = '';
+        if( query && 
+            query.bool && 
+            query.bool.must ) {
+          
+          var arr = query.bool.must;
+
+          for( var i = 0; i < arr.length; i++ ) {
+            if( arr[i].match && arr[i].match.name ) {
+              value = arr[i].match.name;
+            }
+          }
+        }
+
+        this.$.input.value = value;
       }
 
     }
