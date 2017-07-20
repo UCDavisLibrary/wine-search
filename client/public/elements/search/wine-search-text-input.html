@@ -56,18 +56,9 @@
 
     <div style="display: flex; justify-content: center">
       <cork-typeahead id="suggest" on-select="_useSuggestion">
-        <cork-search-box id="input" on-clear="search" on-search="search"></cork-search-box>
+        <cork-search-box id="input" on-clear="search" on-search="search" placeholder="Search using keywords"></cork-search-box>
       </cork-typeahead>
     </div>
-
-    <!--<paper-input label="Search" on-keyup="_onKeyUp"  on-click="_cancelHide" on-focus="suggest" id="input"></paper-input>
-
-    <paper-material class="suggestions" hidden$="[[!suggestions.length]]" on-click="_cancelHide">
-      <h3>Suggestions</h3>
-      <template is="dom-repeat" items="[[suggestions]]">
-        <span><a on-click="_useSuggestion">[[item]]</a></span>
-      </template>
-    </paper-material>-->
 
   </template>
 

@@ -36,8 +36,14 @@
       }
 
       .content {
-        padding: 0 15px;
+        padding: 10px 15px;
         flex: 1;
+      }
+
+      @media(min-width: 768px) {
+        .content {
+          padding: 10px 15px 0 35px;
+        }
       }
 
       wine-search-filter-panel {
@@ -53,7 +59,19 @@
       paper-button#clear {
         color: var(--default-primary-color);
         font-size: 12px;
+        font-style: italic;
         padding : 0;
+      }
+
+      .arrow-right {
+        width: 0; 
+        height: 0; 
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid white;
+        position: absolute;
+        right: -20px;
+        top: 9px;
       }
 
       [hidden] {
@@ -73,7 +91,9 @@
     <div class="center-content-outer">
       <div class="root center-content-inner">
 
-        <div class="left" hidden$="[[isMobile]]">
+        <div class="left" hidden$="[[isMobile]]" style="position: relative">
+          <div class="arrow-right"></div>
+
           <div class="filter-label">Sort Order</div>
           <wine-search-sort-order></wine-search-sort-order>
 
