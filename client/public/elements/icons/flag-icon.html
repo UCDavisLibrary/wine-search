@@ -118,7 +118,7 @@
         }
 
         if( name ) {
-          this.shadowRoot.innerHTML = `<img src="/images/flags/${name}.svg" style="width:20px" />`;
+          this.shadowRoot.innerHTML = `<img src="/images/flags/${name}.svg" style="width:20px; display:inline-block" />`;
           this.supportedCountry = true;
         } else {
           this.shadowRoot.innerHTML = '';
