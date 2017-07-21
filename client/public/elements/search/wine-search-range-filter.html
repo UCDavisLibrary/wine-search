@@ -11,19 +11,63 @@
         display: block
       }
 
-      paper-input[type="number"] {
+      paper-range-slider {
+        width: 90%;
+        --paper-range-slider-width: 100%;
+        --paper-range-slider-knob-start-color: var(--default-primary-color);
+        --paper-range-slider-knob-start-border-color: var(--default-primary-color);
+      }
+
+      cork-input {
         width: 85px;
       }
       #min {
         margin-right: 15px;
       }
 
+      .flex {
+        display: flex;
+        align-items: center;
+      }
+
+      .minmax {
+        color: var(--secondary-text-color);
+        font-size: 12px;
+        margin: 0 44px 0 15px;
+        padding-bottom: 15px;
+      }
     </style>
 
     <cork-toggle-panel label="[[label]]">
-      <div style="display: flex">
-        <paper-input label="Min" id="min" type="number" on-change="setFilter"></paper-input>
-        <paper-input label="Max" id="max" type="number" on-change="setFilter"></paper-input>
+      <div class="flex" style="margin: 5px 0 5px 15px">
+        <div>
+          <cork-input 
+            id="minInput"
+            type="number"
+            on-change="_onInputChange">
+          </cork-input>
+        </div>
+        <span>&nbsp;-&nbsp;</span>
+        <div>
+          <cork-input 
+            id="maxInput"
+            type="number"
+            on-change="_onInputChange">
+          </cork-input>
+        </div>
+      </div>
+
+      <paper-range-slider 
+        id="rangeSlider"
+        step="1" 
+        min="[[activeRangeMin]]" 
+        max="[[activeRangeMax]]" 
+        on-change="_onSliderChange">
+      </paper-range-slider>
+
+      <div class="flex minmax">
+        <div style="flex:1">[[activeRangeMinLabel]]</div>
+        <div>[[activeRangeMaxLabel]]</div>
       </div>
     </cork-toggle-panel>
 
@@ -58,10 +102,6 @@
             type : Number,
             value : 9999
           },
-          firstLoad : {
-            type : Boolean,
-            value : true
-          },
           isDollar : {
             type : Boolean,
             value : false
@@ -78,25 +118,60 @@
         this._onSearchUpdate(e);
       }
 
+      _setValues() {
+        this.$.minInput.value = this.min+'';
+        this.$.maxInput.value = this.max+'';
+
+        try {
+          if( this.min < this.activeRangeMin ) {
+            this.min = this.activeRangeMin;
+          }
+          if( this.max > this.activeRangeMax ) {
+            this.max = this.activeRangeMax;
+          }
+
+          this.$.rangeSlider.setValues(this.min, this.max);
+        } catch(e) {}
+      }
+
+      _onInputChange(e) {
+        this.min = parseInt(this.$.minInput.value);
+        this.max = parseInt(this.$.maxInput.value);
+
+        this._setValues();
+        this._setFilter();
+      }
+
+      _onSliderChange(e) {
+        this.min = parseInt(this.$.rangeSlider.valueMin);
+        this.max = parseInt(this.$.rangeSlider.valueMax);
+
+        this._setValues();
+        this._setFilter();
+      }
+
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        this.activeRangeMin = e.payload.aggregations[this.filter+'-min'].value || 0;
-        this.activeRangeMax = e.payload.aggregations[this.filter+'-max'].value || 0;
+        if( !this.init ) {
 
-        if( this.isDollar ) {
-          this.$.min.label = 'Min $'+this.activeRangeMin.toFixed(2);
-          this.$.max.label = 'Max $'+this.activeRangeMax.toFixed(2);
-        } else {
-          this.$.min.label = 'Min '+this.activeRangeMin;
-          this.$.max.label = 'Max '+this.activeRangeMax;
+          this.activeRangeMin = e.payload.aggregations[this.filter+'-min'].value || 0;
+          this.activeRangeMax = e.payload.aggregations[this.filter+'-max'].value || 0;
+
+          if( this.isDollar ) {
+            this.activeRangeMinLabel = '$'+this.activeRangeMin.toFixed(2);
+            this.activeRangeMaxLabel = '$'+this.activeRangeMax.toFixed(2);
+          } else {
+            this.activeRangeMinLabel = this.activeRangeMin;
+            this.activeRangeMaxLabel = this.activeRangeMax;
+          }
+
+          this.init = true;
         }
 
-        this.firstLoad = false;
-
         var value = {
-          min : '',
-          max : ''
+          min : this.activeRangeMin,
+          max : this.activeRangeMax
         };
 
         var query = e.request.query;
@@ -108,29 +183,35 @@
 
           for( var i = 0; i < arr.length; i++ ) {
             if( arr[i].range && arr[i].range[this.filter] ) {
-              value.max = arr[i].range[this.filter].lte || '';
-              value.min = arr[i].range[this.filter].gte || '';
+              value.max = arr[i].range[this.filter].lte || this.activeRangeMin;
+              value.min = arr[i].range[this.filter].gte || this.activeRangeMax;
               break;
             }
           }
         }
+        
+        if( this.isDollar ) {
+          this.min = parseFloat(value.min.toFixed(2));
+          this.max = parseFloat(value.max.toFixed(2));
+        } else {
+          this.min = value.min;
+          this.max = value.max;
+        }
 
-        this.$.min.value = value.min;
-        this.$.max.value = value.max;
+        this._setValues();
       }
 
-      setFilter() {
-        var range = {};
-        if( this.$.min.value ) range.min = parseFloat(this.$.min.value);
-        if( this.$.max.value ) range.max = parseFloat(this.$.max.value);
+      _setFilter() {
+        if( this.min || this.max ) {
+          var range = {
+            min : this.min,
+            max : this.max
+          };
 
-        if( range.min || range.max ) {
           this._addSearchRangeFilter(this.filter, range);
         } else {
           this._removeSearchRangeFilter(this.filter);
         }
-
-        
       }
 
     }

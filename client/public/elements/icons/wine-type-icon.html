@@ -44,8 +44,8 @@
       }
 
       updateIcon() {
-        if( !this.color ) return;
-        
+        if( this.color === undefined ) return;
+
         var parts = [];
 
         var color = this.color.toLowerCase();
