@@ -1,5 +1,5 @@
 
-<dom-module id="flag-checkbox">
+<dom-module id="wine-type-checkbox">
   <template>
     <style>
       :host {
@@ -7,21 +7,10 @@
         cursor: pointer;
       }
 
-      #flag-root {
+      #icon-root {
         position: relative;
         display: flex;
         align-items: center;
-      }
-
-      flag-icon {
-        border: 2px solid transparent;
-        margin-top: 2px;    
-        line-height: 0px;
-        display: block;
-      }
-
-      flag-icon[checked] {
-        border: 2px solid var(--default-primary-color);
       }
 
       iron-icon[icon="cork:wine-check"] {
@@ -41,28 +30,30 @@
       }
     </style>
 
-    <div id="flag-root" hidden$="[[!supportedCountry]]" on-click="toggle">
+    
+    <div id="icon-root" hidden$="[[!iconAvailable]]" on-click="toggle">
       <div style="position: relative">
-        <flag-icon 
+        <wine-type-icon 
           checked$="[[checked]]"
-          country$="[[value]]" 
-          supported-country="{{supportedCountry}}">
-        </flag-icon>
+          color$="[[color]]"
+          type$="[[type]]" 
+          icon-available="{{iconAvailable}}">
+        </wine-type-icon>
         <iron-icon icon="cork:wine-check" hidden$="[[!checked]]"></iron-icon>
       </div>
-      <div id="label" checked$="[[checked]]">[[value]]</div>
+      <div id="label" checked$="[[checked]]">[[type]][[color]]</div>
     </div>
 
-    <div hidden$="[[supportedCountry]]">
+    <div hidden$="[[iconAvailable]]">
       <normal-checkbox value="[[value]]" checked$="{{checked}}"></normal-checkbox>
     </div>
 
   </template>
 
   <script>
-    class FlagCheckbox extends Polymer.Element {
+    class WineTypeCheckbox extends Polymer.Element {
 
-      static get is() { return 'flag-checkbox'; }
+      static get is() { return 'wine-type-checkbox'; }
 
       static get properties() {
         return {
@@ -72,7 +63,11 @@
             notify : true,
             reflectToAttribute : true
           },
-          value : {
+          color : {
+            type : String,
+            value : ''
+          },
+          type : {
             type : String,
             value : ''
           }
@@ -95,6 +90,6 @@
 
     }
 
-    window.customElements.define(FlagCheckbox.is, FlagCheckbox);
+    window.customElements.define(WineTypeCheckbox.is, WineTypeCheckbox);
   </script>
 </dom-module>

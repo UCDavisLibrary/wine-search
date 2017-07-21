@@ -41,13 +41,18 @@
 
         if( this.type.toLowerCase() === 'country' ) {
           this.ele = document.createElement('flag-checkbox');
+
+        } else if( this.type.toLowerCase() === 'wine type' ) {
+          this.ele = document.createElement('wine-type-checkbox');
+
+        } else if( this.type.toLowerCase() === 'color' ) {
+          this.ele = document.createElement('wine-type-checkbox');
+
         } else {
           this.ele = document.createElement('normal-checkbox');
         }
         
-        if( this.value ) {
-          this.ele.setAttribute('value', this.value);
-        }
+        this._setValue();
         if( this.checked ) {
           this.ele.setAttribute('checked', this.checked);
         }
@@ -59,6 +64,18 @@
         this.shadowRoot.appendChild(this.ele);
       }
 
+      _setValue() {
+        if( this.value ) {
+          if( this.type.toLowerCase() === 'wine type' ) {
+            this.ele.type = this.value;
+          } else if( this.type.toLowerCase() === 'color' ) {
+            this.ele.color = this.value;
+          } else {
+            this.ele.value = this.value;
+          }
+        }
+      }
+
       _onCheckedChange() {
         if( !this.ele || this.ele.checked === this.checked ) return;
         this.ele.checked = this.checked;
@@ -66,7 +83,14 @@
 
       _onValueChange() {
         if( !this.ele ) return;
-        this.ele.setAttribute('value', value);
+
+        if( this.type.toLowerCase() === 'wine type' ) {
+          this.ele.setAttribute('type', value);
+        } else if( this.type.toLowerCase() === 'color' ) {
+          this.ele.setAttribute('color', value);
+        } else {
+          this.ele.setAttribute('value', value);
+        }
       }
 
     }

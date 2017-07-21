@@ -105,6 +105,8 @@
       }
 
       _onCountryChange() {
+        if( !this.country ) return;
+
         var name = this.country.toLowerCase().replace(/\s/,'');
 
         if( this.codeMap[name] ) {

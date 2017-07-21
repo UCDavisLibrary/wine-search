@@ -57,6 +57,12 @@
         margin: 3px 5px 0 0;
       }
 
+      table.details tr td:first-child {
+        text-align: center;
+      }
+      table.details tr td:first-child :first-child {
+        vertical-align: middle;
+      }
     </style>
 
     <div style="display: flex">
@@ -72,11 +78,21 @@
             <div class="accent">adjusted for inflation</div>
           </div>
           <div style="flex:1">
-            <div>[[result.color]] [[result.winetype]]</div>
-            <div class="detail-line">
-              <flag-icon country="[[result.country]]"></flag-icon> [[result.country]]
-            </div>
-            <div>[[result.bottletype]]</div>
+            <table class="details">
+              <tr>
+                <td><wine-type-icon type="[[result.winetype]]" color="[[result.color]]"></wine-type-icon></td>
+                <td>[[result.color]] [[result.winetype]]</td>
+              </tr>
+              <tr hidden$="[[!result.country]]">
+                <td><flag-icon country="[[result.country]]"></flag-icon></td>
+                <td>[[result.country]]</td>
+              </tr>
+              <tr hidden$="[[!result.bottletype]]">
+                <td><iron-icon icon="cork:wine-bottle"></iron-icon></td>
+                <td>[[result.bottletype]]</td>
+              </tr>
+            </table>
+
           </div>
         </div>
 

@@ -1,0 +1,73 @@
+
+<dom-module id="wine-type-icon">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+  </template>
+
+  <script>
+    class WineTypeIcon extends Polymer.Element {
+
+      static get is() { return 'wine-type-icon'; }
+
+      static get properties() {
+        return {
+          type : {
+            type : String,
+            value : ''
+          },
+          color : {
+            type : String,
+            value : ''
+          },
+          iconAvailable : {
+            type : Boolean,
+            value : false,
+            notify : true
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+            'updateIcon(type, color)'
+        ]
+      }
+
+      constructor() {
+        super();
+        this.icons = ['red', 'red-sparkling', 'rose', 
+        'rose-sparkling', 'sparkling', 'still', 'white-sparkling', 'white'];
+      }
+
+      updateIcon() {
+        if( !this.color ) return;
+        
+        var parts = [];
+
+        var color = this.color.toLowerCase();
+        if( color === 'róse' ) color = 'rose';
+        if( color ) parts.push(color);
+
+        var type = this.type.toLowerCase();
+        if( type === 'still' && color ) type = '';
+        if( type ) parts.push(type);
+
+        var icon = parts.join('-');
+        if( this.icons.indexOf(icon) > -1 ) {
+          this.shadowRoot.innerHTML = `<iron-icon icon="cork:wine-${icon}"></iron-icon>`;
+          this.iconAvailable = true;
+        } else {
+          this.shadowRoot.innerHTML = '';
+          this.iconAvailable = false;
+        }
+      }
+
+    }
+
+    window.customElements.define(WineTypeIcon.is, WineTypeIcon);
+  </script>
+</dom-module>
