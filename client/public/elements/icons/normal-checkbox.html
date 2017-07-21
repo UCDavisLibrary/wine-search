@@ -12,7 +12,7 @@
     </style>
 
     <paper-checkbox noink checked="{{checked}}">
-      <span class="value">[[value]]</span>
+      <span class="value">[[realLabel]]</span>
     </paper-checkbox>
 
   </template>
@@ -28,19 +28,26 @@
             type : String,
             value : ''
           },
+          label : {
+            type : String,
+            value : ''
+          },
+          realLabel: {
+            type: String,
+            computed: '_realLabel(value, label)'
+          },
           checked : {
             type : Boolean,
             value : false,
             notify: true,
             reflectToAttribute : true
-            // observer : '_onChange'
           }
         };
       }
 
-      // _onChange() {
-      //   debugger;
-      // }
+      _realLabel(value, label) {
+        return label || value;
+      }
 
     }
 

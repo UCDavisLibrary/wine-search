@@ -14,6 +14,7 @@
       paper-range-slider {
         width: 90%;
         --paper-range-slider-width: 100%;
+        --paper-range-slider-pin-start-color: var(--default-primary-color);
         --paper-range-slider-knob-start-color: var(--default-primary-color);
         --paper-range-slider-knob-start-border-color: var(--default-primary-color);
       }
@@ -57,11 +58,17 @@
         </div>
       </div>
 
+      <!-- 
+        HACK: have to listen to mouse up event cause move range 
+        bar does not trigger on change event :/
+      -->
       <paper-range-slider 
+        pin
         id="rangeSlider"
         step="1" 
         min="[[activeRangeMin]]" 
         max="[[activeRangeMax]]" 
+        on-mouseup="_onSliderChange"
         on-change="_onSliderChange">
       </paper-range-slider>
 
@@ -142,7 +149,11 @@
         this._setFilter();
       }
 
-      _onSliderChange(e) {
+      _onSliderChange() {
+        this.debounce('_onSliderChange', this._onSliderChangeAsync, 50);
+      }
+
+      _onSliderChangeAsync() {
         this.min = parseInt(this.$.rangeSlider.valueMin);
         this.max = parseInt(this.$.rangeSlider.valueMax);
 
@@ -155,8 +166,8 @@
 
         if( !this.init ) {
 
-          this.activeRangeMin = e.payload.aggregations[this.filter+'-min'].value || 0;
-          this.activeRangeMax = e.payload.aggregations[this.filter+'-max'].value || 0;
+          this.activeRangeMin = Math.floor(e.payload.aggregations[this.filter+'-min'].value || 0);
+          this.activeRangeMax = Math.ceil(e.payload.aggregations[this.filter+'-max'].value || 0);
 
           if( this.isDollar ) {
             this.activeRangeMinLabel = '$'+this.activeRangeMin.toFixed(2);
@@ -183,8 +194,8 @@
 
           for( var i = 0; i < arr.length; i++ ) {
             if( arr[i].range && arr[i].range[this.filter] ) {
-              value.max = arr[i].range[this.filter].lte || this.activeRangeMin;
-              value.min = arr[i].range[this.filter].gte || this.activeRangeMax;
+              value.max = arr[i].range[this.filter].lte || this.activeRangeMax;
+              value.min = arr[i].range[this.filter].gte || this.activeRangeMin;
               break;
             }
           }

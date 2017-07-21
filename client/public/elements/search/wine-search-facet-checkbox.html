@@ -36,6 +36,18 @@
         };
       }
 
+      get labelMap() {
+        return {
+          Standard : 'Standard (750 ml)',
+          Fifth : 'Fifth (757 ml)',
+          Magnum: 'Magnum (1500 ml)',
+          'Half Bottle' : 'Half Botto (375ml)',
+          Jeroboam : 'Jeroboam (4500 ml)',
+          Split : 'Split (187.5 ml)'
+        }
+      }
+
+
       ready() {
         super.ready();
 
@@ -50,6 +62,7 @@
 
         } else {
           this.ele = document.createElement('normal-checkbox');
+          this.ele.label = this.labelMap[this.value] || this.value;
         }
         
         this._setValue();
@@ -72,6 +85,7 @@
             this.ele.color = this.value;
           } else {
             this.ele.value = this.value;
+            this.ele.label = this.labelMap[this.value] || this.value;
           }
         }
       }
