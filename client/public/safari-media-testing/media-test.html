@@ -1,0 +1,37 @@
+
+<dom-module id="media-test">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      div {
+        height: 100px;
+        width: 300px;
+        background: red;
+      }
+
+      @media (max-width: 800px) {
+        div {
+          background: blue;
+        }
+      }
+    </style>
+
+    <div>Polymer - Normal DOM</div>
+
+  </template>
+
+  <script>
+    class MediaTest extends Polymer.Element {
+      static get is() { return 'media-test'; }
+
+      _attachDom(dom) {
+        this.appendChild(dom);
+      }
+    }
+
+    window.customElements.define(MediaTest.is, MediaTest);
+  </script>
+</dom-module>

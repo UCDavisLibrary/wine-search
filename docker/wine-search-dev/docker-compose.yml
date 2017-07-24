@@ -41,6 +41,7 @@ services:
       - ../../:/app
     environment:
       ELASTIC_SEARCH_HOST: elasticsearch
+      ELASTIC_SEARCH_LOG: error
     command: bash -c "cd app && node server"
 
 volumes:

@@ -1,0 +1,33 @@
+
+<dom-module id="media-test-shadow">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      div {
+        height: 100px;
+        width: 300px;
+        background: red;
+      }
+
+      @media (max-width: 800px) {
+        div {
+          background: blue;
+        }
+      }
+    </style>
+
+    <div>Polymer - Shadow DOM</div>
+
+  </template>
+
+  <script>
+    class MediaTestShadow extends Polymer.Element {
+      static get is() { return 'media-test-shadow'; }
+    }
+
+    window.customElements.define(MediaTestShadow.is, MediaTestShadow);
+  </script>
+</dom-module>

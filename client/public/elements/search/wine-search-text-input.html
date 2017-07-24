@@ -47,7 +47,7 @@
         }
       }
 
-      @media(max-width: 768px) {
+      @media screen and (max-width: 768px) {
         cork-typeahead {
           width: 100%;
         }
@@ -55,7 +55,7 @@
     </style>
 
     <div style="display: flex; justify-content: center">
-      <cork-typeahead id="suggest" on-select="_useSuggestion">
+      <cork-typeahead wine-search-text-input id="suggest" on-select="_useSuggestion">
         <cork-search-box id="input" on-clear="search" on-search="search" placeholder="Search using keywords"></cork-search-box>
       </cork-typeahead>
     </div>

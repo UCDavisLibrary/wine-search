@@ -1,0 +1,33 @@
+/**
+ * Currently @media defined in Shadow DOM in safari appears to 
+ * need to be required at root document scope :/  Thus this file
+ *
+ * TODO: other than remove, track down bug ticket or create one
+ **/
+
+@media screen and (max-width: 768px) {
+  cork-typeahead[wine-search-text-input] {
+    width: 100%;
+  }
+}
+
+@media(min-width: 768px) {
+  .content[wine-search-page] {
+    padding: 10px 15px 0 35px;
+  }
+}
+
+@media(max-width: 600px) {
+  .content[wine-search-page] {
+    padding: 10px 5px;
+  }
+  paper-material[wine-search-page] {
+    margin: 10px 0;
+  }
+}
+
+@media(max-width: 600px) {
+  iron-image[wine-search-result] {
+    width : 65px; 
+  }
+}

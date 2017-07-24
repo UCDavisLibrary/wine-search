@@ -23,6 +23,10 @@
             type : String,
             value : ''
           },
+          selected : {
+            type : Boolean,
+            value : false
+          },
           iconAvailable : {
             type : Boolean,
             value : false,
@@ -33,7 +37,7 @@
 
       static get observers() {
         return [
-            'updateIcon(type, color)'
+            'updateIcon(type, color, selected)'
         ]
       }
 
@@ -58,6 +62,11 @@
 
         var icon = parts.join('-');
         if( this.icons.indexOf(icon) > -1 ) {
+          if( this.selected ) {
+            parts.push('selected');
+          }
+          icon = parts.join('-');
+
           this.shadowRoot.innerHTML = `<iron-icon icon="cork:wine-${icon}"></iron-icon>`;
           this.iconAvailable = true;
         } else {

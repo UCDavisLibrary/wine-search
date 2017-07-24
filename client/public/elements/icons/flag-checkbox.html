@@ -24,7 +24,7 @@
         border: 2px solid var(--default-primary-color);
       }
 
-      iron-icon[icon="cork:wine-check"] {
+      [check] {
         position: absolute;
         bottom: -3px;
         left: -7px;
@@ -48,7 +48,7 @@
           country$="[[value]]" 
           supported-country="{{supportedCountry}}">
         </flag-icon>
-        <iron-icon icon="cork:wine-check" hidden$="[[!checked]]"></iron-icon>
+        <iron-icon check icon="cork:wine-check" hidden$="[[!checked]]"></iron-icon>
       </div>
       <div id="label" checked$="[[checked]]">[[value]]</div>
     </div>

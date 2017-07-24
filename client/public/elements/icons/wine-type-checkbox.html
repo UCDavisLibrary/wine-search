@@ -13,7 +13,7 @@
         align-items: center;
       }
 
-      iron-icon[icon="cork:wine-check"] {
+      [check] {
         position: absolute;
         bottom: -3px;
         left: -7px;
@@ -38,12 +38,12 @@
     <div id="icon-root" hidden$="[[!iconAvailable]]" on-click="toggle">
       <div style="position: relative">
         <wine-type-icon 
-          checked$="[[checked]]"
+          selected$="[[checked]]"
           color$="[[color]]"
           type$="[[type]]" 
           icon-available="{{iconAvailable}}">
         </wine-type-icon>
-        <iron-icon icon="cork:wine-check" hidden$="[[!checked]]"></iron-icon>
+        <iron-icon check icon="cork:wine-check" hidden$="[[!checked]]"></iron-icon>
       </div>
       <div id="label" checked$="[[checked]]">[[type]][[color]]</div>
     </div>

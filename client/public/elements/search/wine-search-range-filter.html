@@ -166,8 +166,9 @@
 
         if( !this.init ) {
 
-          this.activeRangeMin = Math.floor(e.payload.aggregations[this.filter+'-min'].value || 0);
+          
           this.activeRangeMax = Math.ceil(e.payload.aggregations[this.filter+'-max'].value || 0);
+          this.activeRangeMin = Math.floor(e.payload.aggregations[this.filter+'-min'].value || 0);
 
           if( this.isDollar ) {
             this.activeRangeMinLabel = '$'+this.activeRangeMin.toFixed(2);

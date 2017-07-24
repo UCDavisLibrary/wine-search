@@ -42,6 +42,7 @@
           padding: 10px 15px 0 35px;
         }
       }
+
       @media(max-width: 600px) {
         .content {
           padding: 10px 5px;
@@ -68,6 +69,11 @@
         padding : 0;
       }
 
+      paper-button[close] {
+        color: var(--default-primary-color);
+        font-weight: bold;
+      }
+
       .arrow-right {
         width: 0; 
         height: 0; 
@@ -77,6 +83,17 @@
         position: absolute;
         right: -20px;
         top: 9px;
+      }
+
+      /* .flex-mobile-btns {
+        max-width: 100%;
+        display :flex; 
+        padding-top : 15px
+      } */
+
+      .flex-mobile-btn {
+        width: calc(50% - 40px);
+        max-width: calc(50% - 40px);
       }
 
       [hidden] {
@@ -96,6 +113,7 @@
     <div class="center-content-outer">
       <div class="root center-content-inner">
 
+        <!-- Desktop filter and sort btns -->
         <div class="left" hidden$="[[isMobile]]" style="position: relative">
           <div class="arrow-right"></div>
 
@@ -111,24 +129,33 @@
           </template>
         </div>
 
-        <div class="content">
-          <div hidden$="[[!isMobile]]" style="display:flex; padding-top: 15px">
-            <div style="flex:1; padding-right: 10px">
-              <wine-search-sort-order></wine-search-sort-order>
-            </div>
-            <div style="flex:1; padding-left: 10px">
-              <cork-popup-button label="Refine Results" style="display:block">
-                <div style="padding: 10px">
-                  <div class="filter-label" style="display:flex; align-items: center">
-                    <div style="flex:1">Filters</div> 
-                    <paper-button clear id="clear2" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
-                  </div>
-                  <template is="dom-repeat" items="[[facetFilters]]">
-                    <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
-                  </template>
-                </div>
-              </cork-popup-button>
-            </div>
+        <div class="content" wine-search-page>
+
+          <!-- Mobile filter and sort btns -->
+          <div hidden$="[[!isMobile]]" class="flex-mobile-btns">
+            <table>
+              <tr>
+                <td>
+                  <wine-search-sort-order id="mobileBtn1" style="padding-right: 10px"></wine-search-sort-order>
+                </td>
+                <td>
+                  <cork-popup-button id="mobileBtn2" label="Refine Results" style="display:block; padding-left: 10px">
+                    <div style="padding: 10px">
+                      <div class="filter-label" style="display:flex; align-items: center">
+                        <div style="flex:1">Filters</div> 
+                        <paper-button clear id="clear2" on-click="_clearSearchFilters"><iron-icon icon="clear"></iron-icon> Clear Filters</paper-button>
+                      </div>
+                      <template is="dom-repeat" items="[[facetFilters]]">
+                        <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
+                      </template>
+                    </div>
+                    <div style="padding: 10px; text-align: center">
+                      <paper-button close on-click="_hideMobilePopup">Return to Results</paper-button>
+                    </div>
+                  </cork-popup-button>
+                </td>
+              </tr>
+            </table>
           </div>
 
           <wine-search-pagination>
@@ -136,7 +163,7 @@
           </wine-search-pagination>
 
           <template is="dom-repeat" items="[[results]]">
-            <paper-material style="background: white;">
+            <paper-material wine-search-page style="background: white;">
               <wine-search-result result="[[item]]"></wine-search-result>
             </paper-material>
           </template>
@@ -200,6 +227,16 @@
       ready() {
         super.ready();
         this._getDefaultSearch().then((e) => this._onSearchUpdate(e));
+
+        this._resize();
+        window.addEventListener('resize', this._resize.bind(this));
+      }
+
+      _resize() {
+        var ww = window.innerWidth;
+
+        this.$.mobileBtn1.style.width = ((ww / 2) - 30)+'px';
+        this.$.mobileBtn2.style.width = ((ww / 2) - 30)+'px';
       }
 
       _onDefaultSearchUpdate(e) {
@@ -222,6 +259,10 @@
           this.$.clear1.style.display = 'none';
           this.$.clear2.style.display = 'none';
         }
+      }
+
+      _hideMobilePopup() {
+        this.$.mobileBtn2.hide();
       }
 
     }
