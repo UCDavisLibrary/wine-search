@@ -11,16 +11,13 @@
   }
 }
 
-@media(min-width: 768px) {
+@media(min-width: 769px) {
   .content[wine-search-page] {
     padding: 10px 15px 0 35px;
   }
 }
 
 @media(max-width: 600px) {
-  .content[wine-search-page] {
-    padding: 10px 5px;
-  }
   paper-material[wine-search-page] {
     margin: 10px 0;
   }
