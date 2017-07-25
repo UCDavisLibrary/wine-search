@@ -53,6 +53,10 @@
         border-top: 1px solid var(--light-background-color);
       }
 
+      wine-search-sort-order[desktop] {
+        margin-left: 15px;
+      }
+
       .filter-label {
         font-size: 18px;
         font-weight: bold;
@@ -69,6 +73,10 @@
       paper-button[close] {
         color: var(--default-primary-color);
         font-weight: bold;
+      }
+
+      [clear-icon] {
+        margin-right: -5px;
       }
 
       .arrow-right {
@@ -115,12 +123,12 @@
           <div class="arrow-right"></div>
 
           <div class="filter-label">Sort Order</div>
-          <wine-search-sort-order></wine-search-sort-order>
+          <wine-search-sort-order desktop></wine-search-sort-order>
 
           <div class="filter-label" style="display:flex; align-items: center">
             <div style="flex:1">Filters</div> 
             <paper-button clear id="clear1" on-click="_clearSearchFilters">
-              <iron-icon icon="cork:close"></iron-icon> 
+              <iron-icon clear-icon icon="cork:close"></iron-icon> 
               <span style="vertical-align: middle"> Clear Filters</span>
             </paper-button>
           </div>
@@ -144,7 +152,7 @@
                       <div class="filter-label" style="display:flex; align-items: center">
                         <div style="flex:1">Filters</div> 
                         <paper-button clear id="clear2" on-click="_clearSearchFilters">
-                          <iron-icon icon="cork:close"></iron-icon>
+                          <iron-icon clear-icon icon="cork:close"></iron-icon>
                           <span style="vertical-align: middle"> Clear Filters</span>
                         </paper-button>
                       </div>

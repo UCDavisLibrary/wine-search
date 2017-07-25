@@ -27,7 +27,7 @@ services:
     depends_on:
       - elasticsearch
     volumes: 
-      - ../elasticsearch.yml:/usr/share/kibana/config/kibana.yml
+      - ../kibana.yml:/usr/share/kibana/config/kibana.yml
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:

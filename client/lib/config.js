@@ -28,7 +28,7 @@ module.exports = {
       type : 'facet'
     },
     'bottletype.raw' : {
-      label : 'Bottle Type',
+      label : 'Bottle Size',
       type : 'facet'
     }
   },
