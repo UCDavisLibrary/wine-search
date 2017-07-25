@@ -27,43 +27,13 @@
       --secondary-text-color:     #757575;
       --disabled-text-color:      #BDBDBD;
 
+      --input-border-color:  #AFA6A1;
+
       --primary-color: var(--default-primary-color);
 
       --red-wine : #CC1D32;
       --rose-wine : #ED9898;
       --white-wine : #F7D797;
-
-      --select-input: {
-        width: 100%;
-        border: 0;
-        border-radius: 0;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        padding-left: 0;
-        padding-right: 0\9;
-        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAJ1BMVEVmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmaP/QSjAAAADHRSTlMAAgMJC0uWpKa6wMxMdjkoAAAANUlEQVR4AeXJyQEAERAAsNl7Hf3X6xt0QL6JpZWq30pdvdadme+0PMdzvHm8YThHcT1H7K0BtOMDniZhWOgAAAAASUVORK5CYII=);
-        -webkit-background-size: 13px 13px;
-        background-size: 13px;
-        background-repeat: no-repeat;
-        background-position: right center;
-        -webkit-box-shadow: inset 0 -1px 0 #ddd;
-        box-shadow: inset 0 -1px 0 #ddd;
-        font-size: 16px;
-        line-height: 1.5;
-        display: block;
-        height: 37px;
-        padding: 6px 0px;
-        line-height: 1.846;
-        box-shadow: inset 0 -1px 0 var(--default-primary-color);
-        background-color: transparent;
-        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-      }
-      --select-input-focus: {
-        box-shadow: inset 0 -2px 0 var(--dark-primary-color);
-      }
     }
 </style>
 </custom-style>
@@ -83,17 +53,6 @@
 
       h1, h2, h3, h4 {
         font-weight: 200;
-      }
-      select {
-        @apply(--select-input);
-      }
-      select:focus {
-        @apply(--select-input-focus);
-      }
-      select[disabled] {
-        color: var(--primary-text-color);
-        box-shadow: none;
-        background: none;
       }
 
       .center-content-outer {

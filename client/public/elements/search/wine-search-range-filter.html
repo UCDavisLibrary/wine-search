@@ -62,7 +62,7 @@
         HACK: have to listen to mouse up event cause move range 
         bar does not trigger on change event :/
       -->
-      <paper-range-slider 
+        <paper-range-slider 
         pin
         id="rangeSlider"
         step="1" 
@@ -70,7 +70,9 @@
         max="[[activeRangeMax]]" 
         on-mouseup="_onSliderChange"
         on-change="_onSliderChange">
-      </paper-range-slider>
+       </paper-range-slider>   
+       <!-- <paper-range-slider id="rangeSlider" step="1" value-min="0" value-max="100" min="0" max="100">
+         </paper-range-slider>  -->
 
       <div class="flex minmax">
         <div style="flex:1">[[activeRangeMinLabel]]</div>
