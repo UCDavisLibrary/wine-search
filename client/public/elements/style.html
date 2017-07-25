@@ -1,41 +1,44 @@
+<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+<link rel="import" href="../bower_components/shadycss/apply-shim.html">
+
 <custom-style>
-<style is="custom-style">
-    body, html {
-      @apply(--paper-font-common-base);
-      font-size: 14px;
-      font-weight: 200;
-      margin: 0;
-      padding:0;
-      height: 100%;
-      background-color: rgb(242, 243, 238);
-      color: rgb(51, 41, 38);
-    }
+  <style>
+      body, html {
+        @apply --paper-font-common-base;
+        font-size: 14px;
+        font-weight: 200;
+        margin: 0;
+        padding:0;
+        height: 100%;
+        background-color: rgb(242, 243, 238);
+        color: rgb(51, 41, 38);
+      }
 
-    :root {
+      html {
 
-      --default-primary-color:    rgb(145, 32, 70);
+        --default-primary-color:    rgb(145, 32, 70);
 
-      --dark-background-color: rgb(51, 41, 38);
-      --medium-background-color: rgb(213, 213, 203);
-      --light-background-color: rgb(242, 243, 238);
+        --dark-background-color: rgb(51, 41, 38);
+        --medium-background-color: rgb(213, 213, 203);
+        --light-background-color: rgb(242, 243, 238);
 
-      
-      --accent-color:             rgb(142, 106, 73);
-      
-      --text-primary-color:       rgb(51, 41, 38);
-      --primary-text-color:       var(--text-primary-color);
-      --secondary-text-color:     #757575;
-      --disabled-text-color:      #BDBDBD;
+        
+        --accent-color:             rgb(142, 106, 73);
+        
+        --text-primary-color:       rgb(51, 41, 38);
+        --primary-text-color:       var(--text-primary-color);
+        --secondary-text-color:     #757575;
+        --disabled-text-color:      #BDBDBD;
 
-      --input-border-color:  #AFA6A1;
+        --input-border-color:  #AFA6A1;
 
-      --primary-color: var(--default-primary-color);
+        --primary-color: var(--default-primary-color);
 
-      --red-wine : #CC1D32;
-      --rose-wine : #ED9898;
-      --white-wine : #F7D797;
-    }
-</style>
+        --red-wine : #CC1D32;
+        --rose-wine : #ED9898;
+        --white-wine : #F7D797;
+      }
+  </style>
 </custom-style>
 
 
@@ -43,7 +46,6 @@
 <dom-module id="shared-styles">
   <template>
     <style>
-
       paper-icon-button {
         color: var(--default-primary-color);
       }
@@ -64,6 +66,10 @@
         text-align: left;
       }
 
+      paper-icon-button {
+        color: var(--default-primary-color);
+      }
+
       cork-toggle-panel {
         min-width: 300px;
         --cork-toggle-panel-label: {
@@ -72,7 +78,7 @@
           font-size: 16px;
           padding: 5px;
         };
-        --cork-togglee-panel-icon-color: var(--default-primary-color);
+        --cork-toggle-panel-icon-color: var(--default-primary-color);
       }
 
     </style>

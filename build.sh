@@ -15,7 +15,7 @@ mv $BUNDLE_FILE $DIR/elements.html
 
 cp -r $DEV_ROOT/css $DIR/css
 cp -r $DEV_ROOT/images $DIR/images
-cp -r $DEV_ROOT/js $DIR/js
+cp -r $DEV_ROOT/webcomponentsjs $DIR/webcomponentsjs
 cp $DEV_ROOT/index-dist.html $DIR/index.html
 
 rm -rf $BUNDLE_ROOT

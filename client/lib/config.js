@@ -1,3 +1,5 @@
+console.log('here');
+
 module.exports = {
   // facets to show on left side
   // filter : label
