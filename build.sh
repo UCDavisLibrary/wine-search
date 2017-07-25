@@ -13,10 +13,9 @@ mkdir $DIR
 polymer build --preset es5-bundled --entrypoint $DEV_ROOT/elements.html
 mv $BUNDLE_FILE $DIR/elements.html
 
-echo "cp -r $DEV_ROOT/css $DIR/css"
 cp -r $DEV_ROOT/css $DIR/css
 cp -r $DEV_ROOT/images $DIR/images
 cp -r $DEV_ROOT/js $DIR/js
 cp $DEV_ROOT/index-dist.html $DIR/index.html
 
-rm -rf BUNDLE_ROOT
+rm -rf $BUNDLE_ROOT
