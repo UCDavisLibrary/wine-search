@@ -1,2 +1,4 @@
 node_modules
 client/public/bower_components
+dist
+build

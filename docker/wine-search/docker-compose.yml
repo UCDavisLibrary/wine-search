@@ -11,40 +11,19 @@ services:
         soft: -1
         hard: -1
     mem_limit: 1g
-    # for docker-compose version 3
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 1g
     volumes:
       - esdata:/usr/share/elasticsearch/data
       - ../elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    ports:
-      - 9200:9200
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:5.4.1
-    depends_on:
-      - elasticsearch
-    volumes: 
-      - ../elasticsearch.yml:/usr/share/kibana/config/kibana.yml
-    environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
-    ports:
-      - 5601:5601
 
   app:
-    image: node:8.1.2
+    build: ../..
     depends_on:
       - elasticsearch
     ports:
       - 4321:4321
-    volumes:
-      - ../../:/app
     environment:
       ELASTIC_SEARCH_HOST: elasticsearch
       ELASTIC_SEARCH_LOG: error
-    command: bash -c "cd app && node server"
 
 volumes:
   esdata:
