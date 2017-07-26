@@ -76,7 +76,9 @@
       }
 
       [clear-icon] {
-        margin-right: -5px;
+        display: inline-block;
+        margin-right: -2px;
+        margin-top: -1px;
       }
 
       .arrow-right {
@@ -99,6 +101,12 @@
       .flex-mobile-btn {
         width: calc(50% - 40px);
         max-width: calc(50% - 40px);
+      }
+
+      .close-mobile-filters {
+        padding: 10px; 
+        text-align: center;
+        border-top: 1px solid var(--light-background-color);
       }
 
       [hidden] {
@@ -125,7 +133,7 @@
           <div class="filter-label">Sort Order</div>
           <wine-search-sort-order desktop></wine-search-sort-order>
 
-          <div class="filter-label" style="display:flex; align-items: center">
+          <div class="filter-label" style="display:flex; align-items: center; margin-top: 15px">
             <div style="flex:1">Filters</div> 
             <paper-button clear id="clear1" on-click="_clearSearchFilters">
               <iron-icon clear-icon icon="cork:close"></iron-icon> 
@@ -160,7 +168,7 @@
                         <wine-search-filter-panel parameters="[[item]]"></wine-search-filter-panel>
                       </template>
                     </div>
-                    <div style="padding: 10px; text-align: center">
+                    <div class="close-mobile-filters">
                       <paper-button close on-click="_hideMobilePopup">Return to Results</paper-button>
                     </div>
                   </cork-popup-button>
