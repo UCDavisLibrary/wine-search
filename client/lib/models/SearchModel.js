@@ -284,16 +284,21 @@ class SearchModel extends BaseModel {
     var body = this.getSearch().request;
 
     this.ensurePath('query.bool.must', []);
+    this.removeFromArray(body.query.bool.must, 'multi_match');
 
     if( !text ) {
-      this.removeFromArray(body.query.bool.must, 'match');
       this.cleanEmptyLeaves();
       if( options.exec ) this.search(body);
       return body;
     }
 
-    var match = this.getOrCreateFromArray(body.query.bool.must, 'match');
-    match.name = text;
+    body.query.bool.must.push({
+      multi_match : {
+        query : text,
+        fields : ['name', 'section']
+      }
+    });
+    
     if( options.exec ) {
       this.setPaging(); // reset page
       this.search(body);
@@ -380,10 +385,9 @@ class SearchModel extends BaseModel {
   }
 
   removeFromArray(array, type) {
-    for( var i = 0; i < array.length; i++ ) {
+    for( var i = array.length-1; i >= 0; i-- ) {
       if( array[i][type] ) {
         array.splice(i, 1);
-        return;
       }
     }
   }
