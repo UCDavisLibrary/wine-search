@@ -51,6 +51,11 @@
         float: right;
       }
 
+      .overflow {
+        overflow: auto;
+        max-height: 200px;
+      }
+
       paper-checkbox[active] .key {
         color: var(--default-primary-color);
         font-weight: bold;
@@ -63,21 +68,23 @@
     </style>
 
     <cork-toggle-panel label="[[label]]">      
-      <div>
-        <template is="dom-repeat" items="[[buckets]]">
-          <div class="filter">
+      <div class="overflow">
+        <div>
+          <template is="dom-repeat" items="[[buckets]]">
+            <div class="filter">
 
-            <wine-search-facet-checkbox
-              type$="[[label]]"
-              index$="[[index]]"
-              value$="[[item.key]]"
-              checked$="[[item.active]]" 
-              on-change="_toggleFilter">
-            </wine-search-facet-checkbox>
+              <wine-search-facet-checkbox
+                type$="[[label]]"
+                index$="[[index]]"
+                value$="[[item.key]]"
+                checked$="[[item.active]]" 
+                on-change="_toggleFilter">
+              </wine-search-facet-checkbox>
 
-            <span class="count">[[item.doc_count]]</span>
-          </div>
-        </template>
+              <span class="count">[[item.doc_count]]</span>
+            </div>
+          </template>
+        </div>
       </div>
     </cork-toggle-panel>
     
