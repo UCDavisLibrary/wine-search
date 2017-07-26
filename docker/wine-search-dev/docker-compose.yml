@@ -44,6 +44,7 @@ services:
     environment:
       ELASTIC_SEARCH_HOST: elasticsearch
       ELASTIC_SEARCH_LOG: error
+      # WINE_SEARCH_ENV: production
     command: bash -c "cd app && node server"
 
 volumes:

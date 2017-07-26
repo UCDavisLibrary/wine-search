@@ -19,7 +19,7 @@ class SearchModel extends BaseModel {
 
     this.defaultSearch();
 
-    this.bindMethods();
+    this.bindMethods('SearchModel');
   }
 
   /**

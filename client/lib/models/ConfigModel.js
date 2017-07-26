@@ -5,7 +5,7 @@ class ConfigModel extends BaseModel {
 
   constructor() {
     super();
-    this.bindMethods();
+    this.bindMethods('ConfigModel');
   }
 
   get() {

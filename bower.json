@@ -35,6 +35,6 @@
     "paper-range-slider": "zpv/paper-range-slider#^1.0.0",
     "cork-input": "cork-elements/cork-input",
     "polymer": "Polymer/polymer#^2.0.2",
-    "webcomponentsjs": "~1.0.1"
+    "webcomponentsjs": "1.0.1"
   }
 }
