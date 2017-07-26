@@ -23,4 +23,5 @@ console.log(`Wine-Search in ${config.env} mode, serving ${assetPath}`);
 
 app.listen(config.port, function () {
   console.log(`Wine-Search app listening on port ${config.port}`);
+  require('./lib/dataUpdate');
 });

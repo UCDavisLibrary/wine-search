@@ -32,7 +32,8 @@
         super();
 
         this.thesaurus = {
-          england : 'gb'
+          england : 'gb',
+          unitedstatesofamerica : 'us'
         }
 
         this.iconNames = ["ad","bh","ck","er","gl","io","lc","mq","om","sb","tf","vc",
@@ -107,7 +108,7 @@
       _onCountryChange() {
         if( !this.country ) return;
 
-        var name = this.country.toLowerCase().replace(/\s/,'');
+        var name = this.country.toLowerCase().replace(/\s/g,'');
 
         if( this.codeMap[name] ) {
           name = this.codeMap[name];
