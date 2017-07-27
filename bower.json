@@ -35,6 +35,7 @@
     "cork-input": "cork-elements/cork-input",
     "polymer": "Polymer/polymer#^2.0.2",
     "webcomponentsjs": "1.0.1",
-    "paper-range-slider": "cork-elements/paper-range-slider#^1.0.1"
+    "paper-range-slider": "cork-elements/paper-range-slider#^1.0.1",
+    "cork-style": "cork-elements/cork-style"
   }
 }
