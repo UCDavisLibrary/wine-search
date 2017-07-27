@@ -32,9 +32,9 @@
     "cork-popup-button": "cork-elements/cork-popup-button",
     "flag-icon-css": "^2.8.0",
     "cork-icons": "cork-elements/cork-icons",
-    "paper-range-slider": "zpv/paper-range-slider#^1.0.0",
     "cork-input": "cork-elements/cork-input",
     "polymer": "Polymer/polymer#^2.0.2",
-    "webcomponentsjs": "1.0.1"
+    "webcomponentsjs": "1.0.1",
+    "paper-range-slider": "cork-elements/paper-range-slider#^1.0.1"
   }
 }

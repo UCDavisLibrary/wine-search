@@ -62,22 +62,23 @@
         HACK: have to listen to mouse up event cause move range 
         bar does not trigger on change event :/
       -->
-        <!-- <paper-range-slider 
+         <paper-range-slider 
         pin
         id="rangeSlider"
         step="1" 
         min="[[activeRangeMin]]" 
         max="[[activeRangeMax]]" 
+        on-touchend="_onSliderChange"
         on-mouseup="_onSliderChange"
         on-change="_onSliderChange">
-       </paper-range-slider>    -->
+       </paper-range-slider>    
        <!-- <paper-range-slider id="rangeSlider" step="1" value-min="0" value-max="100" min="0" max="100">
          </paper-range-slider>  -->
 
-      <!-- <div class="flex minmax">
-        <div style="flex:1">[[activeRangeMinLabel]]</div>
-        <div>[[activeRangeMaxLabel]]</div>
-      </div> -->
+        <div class="flex minmax"> 
+          <div style="flex:1">[[activeRangeMinLabel]]</div>
+          <div>[[activeRangeMaxLabel]]</div>
+        </div> 
     </cork-toggle-panel>
 
   </template>
@@ -131,16 +132,16 @@
         this.$.minInput.value = this.min+'';
         this.$.maxInput.value = this.max+'';
 
-        // try {
-        //   if( this.min < this.activeRangeMin ) {
-        //     this.min = this.activeRangeMin;
-        //   }
-        //   if( this.max > this.activeRangeMax ) {
-        //     this.max = this.activeRangeMax;
-        //   }
+        try {
+          if( this.min < this.activeRangeMin ) {
+            this.min = this.activeRangeMin;
+          }
+          if( this.max > this.activeRangeMax ) {
+            this.max = this.activeRangeMax;
+          }
 
-        //   this.$.rangeSlider.setValues(this.min, this.max);
-        // } catch(e) {}
+          this.$.rangeSlider.setValues(this.min, this.max);
+        } catch(e) {}
       }
 
       _onInputChange(e) {
@@ -151,17 +152,17 @@
         this._setFilter();
       }
 
-      // _onSliderChange() {
-      //   this.debounce('_onSliderChange', this._onSliderChangeAsync, 50);
-      // }
+      _onSliderChange() {
+        this.debounce('_onSliderChange', this._onSliderChangeAsync, 50);
+      }
 
-      // _onSliderChangeAsync() {
-      //   this.min = parseInt(this.$.rangeSlider.valueMin);
-      //   this.max = parseInt(this.$.rangeSlider.valueMax);
+      _onSliderChangeAsync() {
+        this.min = parseInt(this.$.rangeSlider.valueMin);
+        this.max = parseInt(this.$.rangeSlider.valueMax);
 
-      //   this._setValues();
-      //   this._setFilter();
-      // }
+        this._setValues();
+        this._setFilter();
+      }
 
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
