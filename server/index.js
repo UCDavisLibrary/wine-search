@@ -2,7 +2,12 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors');
 let config = require('./config');
+
+// enable CORS
+app.use(cors());
+app.options('*', cors());
 
 app.use(bodyParser.json());
 

@@ -13,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "cork-app-utils": "github:UCDavisLibrary/cork-app-utils",
+    "cors": "^2.8.4",
     "elasticsearch": "^13.1.1",
     "express": "^4.15.3",
     "superagent": "^3.5.2"
