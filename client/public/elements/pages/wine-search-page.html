@@ -177,15 +177,29 @@
             </table>
           </div>
 
-          <wine-search-pagination>
-            <span style="font-style: italic">Showing [[start]] to [[stop]] of [[total]]</span>
-          </wine-search-pagination>
+          <cork-pagination
+            text-mode
+            on-nav="_setSearchPaging"
+            current-index="[[start]]"
+            total-results="[[total]]"
+            items-per-page="10">
+          </cork-pagination>
 
           <template is="dom-repeat" items="[[results]]">
             <paper-material wine-search-page style="background: white;">
               <wine-search-result result="[[item]]"></wine-search-result>
             </paper-material>
           </template>
+
+          <cork-pagination
+            on-nav="_setSearchPaging"
+            style="margin-bottom:25px"
+            current-index="[[start]]"
+            total-results="[[total]]"
+            items-per-page="10">
+          </cork-pagination>
+
+
         </div>
       </div>
     </div>
@@ -265,7 +279,7 @@
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
 
-        this.start = (e.request.from === 0 ) ? 1 : e.request.from;
+        this.start = e.request.from;
         this.stop = (e.request.from + e.request.size > e.payload.hits.total) ? e.payload.hits.total : e.request.from + e.request.size;
         this.total = e.payload.hits.total;
 
@@ -278,6 +292,10 @@
           this.$.clear1.style.display = 'none';
           this.$.clear2.style.display = 'none';
         }
+      }
+
+      _setSearchPaging(e) {
+        return super._setSearchPaging(e.detail.startIndex, 10);
       }
 
       _hideMobilePopup() {

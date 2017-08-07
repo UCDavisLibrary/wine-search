@@ -43,8 +43,9 @@
 
       constructor() {
         super();
-        this.icons = ['red', 'red-sparkling', 'rose', 
-        'rose-sparkling', 'sparkling', 'still', 'white-sparkling', 'white'];
+        this.icons = ['red', 'red-sparkling', 'red-fortified', 'rose', 
+        'rose-sparkling', 'rose-fortified', 'sparkling', 'still', 'white-sparkling', 
+        'white', 'white-fortified', 'fortified'];
       }
 
       updateIcon() {
@@ -53,7 +54,7 @@
         var parts = [];
 
         var color = this.color.toLowerCase();
-        if( color === 'róse' ) color = 'rose';
+        if( color === 'róse' || color === 'rosé' ) color = 'rose';
         if( color ) parts.push(color);
 
         var type = this.type.toLowerCase();
