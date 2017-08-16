@@ -125,7 +125,7 @@
 
       ready() {
         super.ready();
-        this._getDefaultSearch().then(e => this._onDefaultSearchUpdate(e));
+        this._onDefaultSearchUpdate(this._getDefaultSearch());
       }
 
       _onDefaultSearchUpdate(e) {

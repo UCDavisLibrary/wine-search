@@ -6,7 +6,7 @@ module.exports = {
       label : 'Color',
       type : 'facet'
     },
-    'winetype.raw' : {
+    'wine_type.raw' : {
       label : 'Wine Type',
       type : 'facet'
     },
@@ -27,7 +27,7 @@ module.exports = {
       label : 'Country',
       type : 'facet'
     },
-    'bottletype.raw' : {
+    'bottle_type.raw' : {
       label : 'Bottle Size',
       type : 'facet'
     }

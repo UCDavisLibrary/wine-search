@@ -5,10 +5,10 @@ class ConfigModel extends BaseModel {
 
   constructor() {
     super();
-    this.bindMethods('ConfigModel');
+    this.registerIOC('ConfigModel');
   }
 
-  get() {
+  async get() {
     return config;
   }
 

@@ -3,11 +3,9 @@
   const ConfigMixin = subclass =>
 
   class ConfigInterface extends subclass {
-    
-      get bind() {
-        return Object.assign(super.bind, 
-          {}
-        );
+      constructor() {
+        super();
+        this._iocInject('ConfigModel');
       }
 
       ready() {
@@ -16,7 +14,7 @@
       }
 
       _getConfig() {
-        return this.emit('ConfigModel.get');
+        return this.ConfigModel.get();
       }
 
       _onConfigUpdate(e) {

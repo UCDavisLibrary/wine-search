@@ -90,16 +90,16 @@
           <div style="flex:1">
             <table class="details">
               <tr>
-                <td><wine-type-icon type="[[result.winetype]]" color="[[result.color]]"></wine-type-icon></td>
-                <td>[[result.color]] [[result.winetype]]</td>
+                <td><wine-type-icon type="[[result.wine_type]]" color="[[result.color]]"></wine-type-icon></td>
+                <td>[[result.color]] [[result.wine_type]]</td>
               </tr>
               <tr hidden$="[[!result.country]]">
                 <td><flag-icon country="[[result.country]]"></flag-icon></td>
                 <td>[[result.country]]</td>
               </tr>
-              <tr hidden$="[[!result.bottletype]]">
+              <tr hidden$="[[!result.bottle_type]]">
                 <td><iron-icon icon="cork:wine-bottle"></iron-icon></td>
-                <td>[[result.bottletype]]</td>
+                <td>[[result.bottle_type]]</td>
               </tr>
             </table>
 

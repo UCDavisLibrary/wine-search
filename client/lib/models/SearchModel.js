@@ -1,14 +1,15 @@
 var BaseModel = require('cork-app-utils').BaseModel;
 var config = require('../config');
-var service = require('../services/search');
-var store = require('../store/SearchStore');
+var SearchService = require('../services/search');
+var SearchStore = require('../store/SearchStore');
 var ServiceWrapper = require('../services/utils');
 
 class SearchModel extends BaseModel {
 
   constructor() {
     super();
-    this.jstore = store;
+    this.store = SearchStore;
+    this.service = SearchService;
 
     this.from = 0;
     this.size = 10;
@@ -19,7 +20,7 @@ class SearchModel extends BaseModel {
 
     this.defaultSearch();
 
-    this.bindMethods('SearchModel');
+    this.registerIOC('SearchModel');
   }
 
   /**
@@ -39,15 +40,7 @@ class SearchModel extends BaseModel {
 
     this._addFacetsToBody(body);
 
-    this.jstore.setSearchLoading(body);
-    ServiceWrapper.call({
-      store : this.jstore,
-      request : service.search(body),
-      onSuccess : this.jstore.setSearchLoaded,
-      onError : this.jstore.setSearchError
-    });
-
-    return this.getSearch();
+    return this.service.search(body);
   }
 
   defaultSearch() {
@@ -79,15 +72,7 @@ class SearchModel extends BaseModel {
       }
     }
 
-    this.jstore.setDefaultSearchLoading(body);
-    ServiceWrapper.call({
-      store : this.jstore,
-      request : service.search(body),
-      onSuccess : this.jstore.setDefaultSearchLoaded,
-      onError : this.jstore.setDefaultSearchError
-    });
-
-    return this.getDefaultSearch();
+    return this.service.defaultSearch(body);
   }
 
   _addFacetsToBody(body) {
@@ -112,15 +97,15 @@ class SearchModel extends BaseModel {
   }
 
   getSearch() {
-    return this.jstore.getSearch();
+    return this.store.getSearch();
   }
 
   getDefaultSearch() {
-    return this.jstore.getDefaultSearch();
+    return this.store.getDefaultSearch();
   }
 
   getSuggest() {
-    return this.jstore.getSuggest();
+    return this.store.getSuggest();
   }
 
   setSort(key, order, exec) {
@@ -256,15 +241,7 @@ class SearchModel extends BaseModel {
       }
     }
 
-    this.jstore.setSuggestLoading(body);
-    ServiceWrapper.call({
-      store : this.jstore,
-      request : service.search(body),
-      onSuccess : this.jstore.setSuggestLoaded,
-      onError : this.jstore.setSuggestError
-    });
-
-    return this.getSuggest();
+    return this.service.suggest(body);
   }
 
   removeSuggest(key, exec) {

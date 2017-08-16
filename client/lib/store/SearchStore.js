@@ -1,8 +1,15 @@
-var EventBus = require('cork-app-utils').EventBus;
+var BaseStore = require('cork-app-utils').BaseStore;
 
-class SearchStore {
+class SearchStore extends BaseStore {
 
   constructor() {
+    super();
+    this.events = {
+      SEARCH_UPDATE : 'search-update',
+      DEFAULT_SEARCH_UPDATE : 'default-search-update',
+      SUGGEST_UPDATE : 'suggest-update'
+    }
+
     this.data = {
       defaultSearch : {
         state : 'init',
@@ -24,18 +31,21 @@ class SearchStore {
   /**
    * Default Search
    */
-  setDefaultSearch(state) {
-    this.data.defaultSearch = Object.assign({}, this.data.defaultSearch, state);
-    EventBus.emit('default-search-update', this.data.defaultSearch);
-  }
+  // setDefaultSearch(state) {
+  //   this.data.defaultSearch = Object.assign({}, this.data.defaultSearch, state);
+  //   this.emit(this.events.DEFAULT_SEARCH_UPDATE, this.data.defaultSearch);
+  // }
 
   setDefaultSearchLoading(data) {
-    this._setDefaultSearchState({state: 'loading', request: data});
+    this._setDefaultSearchState({
+      state: this.STATE.LOADING, 
+      request: data
+    });
   }
 
   setDefaultSearchLoaded(payload) {
     this._setDefaultSearchState({
-      state: 'loaded',   
+      state: this.STATE.LOADED,   
       request: this.data.defaultSearch.request,
       payload: payload
     });
@@ -43,7 +53,7 @@ class SearchStore {
 
   setDefaultSearchError(e) {
     this._setSearchState({
-      state: 'error',   
+      state: this.STATE.ERROR,   
       request: this.data.defaultSearch.request,
       error: e
     });
@@ -55,7 +65,7 @@ class SearchStore {
 
   _setDefaultSearchState(state) {
     this.data.defaultSearch = Object.assign({}, state);
-    EventBus.emit('default-search-update', this.data.defaultSearch);
+    this.emit(this.events.DEFAULT_SEARCH_UPDATE, this.data.defaultSearch);
   }
 
 
@@ -63,12 +73,15 @@ class SearchStore {
    * Search
    */
   setSearchLoading(data) {
-    this._setSearchState({state: 'loading', request: data});
+    this._setSearchState({
+      state: this.STATE.LOADING, 
+      request: data
+    });
   }
 
   setSearchLoaded(payload) {
     this._setSearchState({
-      state: 'loaded',   
+      state: this.STATE.LOADED,   
       request: this.data.search.request,
       payload: payload
     });
@@ -76,7 +89,7 @@ class SearchStore {
 
   setSearchError(e) {
     this._setSearchState({
-      state: 'error',   
+      state: this.STATE.ERROR,   
       request: this.data.search.request,
       error: e
     });
@@ -84,7 +97,7 @@ class SearchStore {
 
   _setSearchState(state) {
     this.data.search = Object.assign({}, state);
-    EventBus.emit('search-update', this.data.search);
+    this.emit(this.events.SEARCH_UPDATE, this.data.search);
   }
 
   getSearch() {
@@ -96,12 +109,15 @@ class SearchStore {
    * Suggest
    */
   setSuggestLoading(data) {
-    this._setSuggestState({state: 'loading', request: data});
+    this._setSuggestState({
+      state: this.STATE.LOADING, 
+      request: data
+    });
   }
 
   setSuggestLoaded(payload) {
     this._setSuggestState({
-      state: 'loaded',   
+      state: this.STATE.LOADED,   
       request: this.data.suggest.request,
       payload: payload
     });
@@ -109,7 +125,7 @@ class SearchStore {
 
   setSuggestError(e) {
     this._setSuggestState({
-      state: 'error',   
+      state: this.STATE.ERROR,   
       request: this.data.suggest.request,
       error: e
     });
@@ -117,7 +133,7 @@ class SearchStore {
 
   _setSuggestState(state) {
     this.data.suggest = Object.assign({}, state);
-    EventBus.emit('suggest-update', this.data.suggest);
+    this.emit(this.events.SUGGEST_UPDATE, this.data.suggest);
   }
 
   getSuggest() {

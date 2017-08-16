@@ -3,76 +3,66 @@
   const SearchMixin = subclass =>
 
   class SearchInterface extends subclass {
-    
-      get bind() {
-        return Object.assign(super.bind, 
-          {
-            'search-update' : '_onSearchUpdate',
-            'default-search-update' : '_onDefaultSearchUpdate',
-            'suggest-update' : '_onSuggestUpdate'
-          }
-        );
+      constructor() {
+        super();
+        this._iocInject('SearchModel');
       }
 
       ready() {
         super.ready();
-        this._getSearch().then((state) => this._onSearchUpdate(state));
+        this._onSearchUpdate(this._getSearch());
       }
 
       _search(body) {
-        return this.emit('SearchModel.search', body);
+        return this.SearchModel.search(body);
       }
 
       _getSearch() {
-        return this.emit('SearchModel.getSearch');
+        return this.SearchModel.getSearch();
       }
 
       _getDefaultSearch() {
-        return this.emit('SearchModel.getDefaultSearch');
+        return this.SearchModel.getDefaultSearch();
       }
 
       _clearSearchFilters() {
-        return this.emit('SearchModel.clearFilters');
+        return this.SearchModel.clearFilters();
       }
 
       _setSort(key = '', order = '', exec = true) {
-        return this.emit('SearchModel.setSort', key, order, exec);
+        return this.SearchModel.setSort(key, order, exec);
       }
 
       _removeSearchRangeFilter(key, exec = true) {
-        return this.emit('SearchModel.removeRangeFilter', key, exec);
+        return this.SearchModel.removeRangeFilter(key, exec);
       }
 
       _addSearchRangeFilter(key, range, exec = true) {
-        return this.emit('SearchModel.addRangeFilter', key, range, exec);
+        return this.SearchModel.addRangeFilter(key, range, exec);
       }
 
       _appendSearchFilter(key, value, exec = true) {
-        return this.emit('SearchModel.appendFilter', key, value, exec);
+        return this.SearchModel.appendFilter(key, value, exec);
       }
 
       _removeSearchFilter(key, value, exec = true) {
-        return this.emit('SearchModel.removeFilter', key, value, exec);
+        return this.SearchModel.removeFilter(key, value, exec);
       }
 
       _suggest(text, exec = true) {
-        return this.emit('SearchModel.suggest', text, exec);
+        return this.SearchModel.suggest(text, exec);
       }
 
       _textSearch(text, options) {
-        return this.emit('SearchModel.textSearch', text, options);
+        return this.SearchModel.textSearch(text, options);
       }
 
       _setSearchPaging(from, size, exec = true) {
-        return this.emit('SearchModel.setPaging', from, size, exec);
+        return this.SearchModel.setPaging(from, size, exec);
       }
 
       _onSearchUpdate(e) {
         // implement me
       }
-
-      _onDefaultSearchUpdate(e) {}
-
-      _onSuggestUpdate(e) {}
   }
 </script>

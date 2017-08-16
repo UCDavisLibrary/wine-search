@@ -19,10 +19,11 @@ var cpi = require('./cpi');
 
 async function getMarks() {
   new Promise((resolve, reject) => {
-    const stream = fs.createWriteStream(path.join(__dirname, 'data', 'marks.json'));
+    const filename = path.join(__dirname, 'data', 'marks.json');
+    const stream = fs.createWriteStream();
     
     stream.on('close', () => {
-      marks = require('./data/marks');
+      marks = JSON.parse(fs.readFileSync(filename));
       resolve();
     })
     
