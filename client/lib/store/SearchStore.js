@@ -31,11 +31,6 @@ class SearchStore extends BaseStore {
   /**
    * Default Search
    */
-  // setDefaultSearch(state) {
-  //   this.data.defaultSearch = Object.assign({}, this.data.defaultSearch, state);
-  //   this.emit(this.events.DEFAULT_SEARCH_UPDATE, this.data.defaultSearch);
-  // }
-
   setDefaultSearchLoading(data) {
     this._setDefaultSearchState({
       state: this.STATE.LOADING, 
