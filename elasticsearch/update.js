@@ -8,7 +8,7 @@ var client = new elasticsearch.Client({
   log: 'error'
 });
 
-var MARKS_API = 'https://wine-api.library.ucdavis.edu/prices';
+// var MARKS_API = 'https://wine-api.library.ucdavis.edu/prices';
 var ALIAS_NAME = 'wine-search';
 var SCHEMA_TYPE = 'mark';
 var BULK_SIZE = 200;
@@ -17,19 +17,23 @@ var marks;
 var schema = require('./schema/marks');
 var cpi = require('./cpi');
 
-async function getMarks() {
-  new Promise((resolve, reject) => {
-    const filename = path.join(__dirname, 'data', 'marks.json');
-    const stream = fs.createWriteStream(filename);
+// async function getMarks() {
+//   new Promise((resolve, reject) => {
+//     const filename = path.join(__dirname, 'data', 'marks.json');
+//     const stream = fs.createWriteStream(filename);
     
-    stream.on('close', () => {
-      marks = JSON.parse(fs.readFileSync(filename));
-      resolve();
-    })
+//     stream.on('close', () => {
+//       marks = JSON.parse(fs.readFileSync(filename));
+//       resolve();
+//     })
     
-    const req = request.get(MARKS_API);
-    req.pipe(stream);
-  });
+//     const req = request.get(MARKS_API);
+//     req.pipe(stream);
+//   });
+// }
+
+async function getBoxes() {
+  marks = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'crowd_source_example.json')));
 }
 
 async function getCurrentIndexes() {
@@ -128,6 +132,10 @@ async function insertMarks(index) {
         mark.perprice2017 = calc2017(mark.perprice, mark.publication_date);
       }
 
+      if( mark.bbox && typeof mark.bbox === 'object' ) {
+        mark.bbox = JSON.stringify(mark.bbox);
+      }
+
       actions.push({index: { 
         _index: index, 
         _type: SCHEMA_TYPE, 
@@ -150,11 +158,11 @@ async function insertMarks(index) {
 }
 
 module.exports = async function() {
-  console.log('Fetching current marks from', MARKS_API);
-  console.time('Mark Fetch Time');
-  await getMarks();
-  console.timeEnd('Mark Fetch Time');
-
+  // console.log('Fetching current marks from', MARKS_API);
+  // console.time('Mark Fetch Time');
+  // await getMarks();
+  // console.timeEnd('Mark Fetch Time');
+  getBoxes();
 
   console.log('Grabbing current indexes')
   var oldIndexes = await getCurrentIndexes();

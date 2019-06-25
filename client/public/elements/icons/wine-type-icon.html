@@ -53,11 +53,11 @@
 
         var parts = [];
 
-        var color = this.color.toLowerCase();
+        var color = (this.color || '').toLowerCase();
         if( color === 'róse' || color === 'rosé' ) color = 'rose';
         if( color ) parts.push(color);
 
-        var type = this.type.toLowerCase();
+        var type = (this.type || '').toLowerCase();
         if( type === 'still' && color ) type = '';
         if( type ) parts.push(type);
 

@@ -73,6 +73,7 @@
       }
 
 
+
     </style>
 
     <div style="display: flex">
@@ -152,6 +153,12 @@
         };
       }
 
+      constructor() {
+        super();
+
+        this.addEventListener('click', this._onClick.bind(this));
+      }
+
       _price(result) {
         return (result.perprice || 0).toFixed(2);
       }
@@ -161,11 +168,15 @@
       }
 
       _editUrl(result) {
-        return `https://ptv.library.ucdavis.edu/#${result.catalog_id}/${result.page_id}/view/${result.mark_id}`;
+        return `https://digital.ucdavis.edu/ark:/87287/${result.ark}`;
       }
 
       _coverUrl(result) {
-        return `https://wine-api.library.ucdavis.edu/media?select=thumbnail2x_png&media_id=eq.${result.catalog_id}`;
+        return `https://digital.ucdavis.edu/ark:/87287/${result.ark}/media/images/${result.page_ark.replace(/-.*/, '-000')}.jpg/svc:iiif/full/,175/0/default.jpg`;
+      }
+
+      _onClick() {
+        document.querySelector('wine-bbox-preview').show(this.result);
       }
 
     }
