@@ -20,7 +20,7 @@ services:
     depends_on:
       - elasticsearch
     ports:
-      - 4321:4321
+      - 4323:4321
     environment:
       ELASTIC_SEARCH_HOST: elasticsearch
       ELASTIC_SEARCH_LOG: error
