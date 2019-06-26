@@ -125,7 +125,23 @@
       }
 
       _onDefaultSearchUpdate(e) {
-        this._onSearchUpdate(e);
+        if( e.state !== 'loaded' ) return;
+
+        this.activeRangeMax = Math.ceil(e.payload.aggregations[this.filter+'-max'].value || 0);
+        this.activeRangeMin = Math.floor(e.payload.aggregations[this.filter+'-min'].value || 0);
+
+        if( this.isDollar ) {
+          this.activeRangeMinLabel = '$'+this.activeRangeMin.toFixed(2);
+          this.activeRangeMaxLabel = '$'+this.activeRangeMax.toFixed(2);
+        } else {
+          this.activeRangeMinLabel = this.activeRangeMin;
+          this.activeRangeMaxLabel = this.activeRangeMax;
+        }
+
+        this.init = true;
+        if( this.searchWaiting ) {
+          this._onSearchUpdate(this.searchWaiting);
+        }
       }
 
       _setValues() {
@@ -166,22 +182,8 @@
 
       _onSearchUpdate(e) {
         if( e.state !== 'loaded' ) return;
-
         if( !this.init ) {
-
-          
-          this.activeRangeMax = Math.ceil(e.payload.aggregations[this.filter+'-max'].value || 0);
-          this.activeRangeMin = Math.floor(e.payload.aggregations[this.filter+'-min'].value || 0);
-
-          if( this.isDollar ) {
-            this.activeRangeMinLabel = '$'+this.activeRangeMin.toFixed(2);
-            this.activeRangeMaxLabel = '$'+this.activeRangeMax.toFixed(2);
-          } else {
-            this.activeRangeMinLabel = this.activeRangeMin;
-            this.activeRangeMaxLabel = this.activeRangeMax;
-          }
-
-          this.init = true;
+          this.searchWaiting = e;
         }
 
         var value = {

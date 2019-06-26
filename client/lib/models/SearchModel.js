@@ -18,15 +18,43 @@ class SearchModel extends BaseModel {
       order : ''
     }
 
-    this.defaultSearch();
+    window.addEventListener('hashchange', () => {
+      let hash = window.location.hash.replace(/#/, '');
+      if( hash ) {
+        this._search({query: JSON.parse(decodeURIComponent(hash))});
+      } else {
+        this._search();
+      }
+    });
+
+    this.init();
 
     this.registerIOC('SearchModel');
+  }
+
+  async init() {
+    await this.defaultSearch();
+
+    let hash = window.location.hash.replace(/#/, '');
+    if( hash ) {
+      this._search({query: JSON.parse(decodeURIComponent(hash))});
+    } else {
+      this._search();
+    }
+  }
+
+  search(body = {}) {
+    if( !body.query )  {
+      window.location.hash = '';
+    } else {
+      window.location.hash = encodeURIComponent(JSON.stringify(body.query));
+    }
   }
 
   /**
    * Triggers search-update event
    */
-  search(body = {}) {
+  _search(body = {}) {
     body.aggs = {};
 
     body.from = this.from;

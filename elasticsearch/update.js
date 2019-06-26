@@ -170,7 +170,18 @@ module.exports = async function() {
   // console.time('Mark Fetch Time');
   // await getMarks();
   // console.timeEnd('Mark Fetch Time');
-  getBoxes();
+  await getBoxes();
+
+  // let c = 0;
+  // marks.forEach(mark => {
+  //   mark.bbox = JSON.parse(mark.bbox);
+  //   if( mark.bbox.coordinates[0][0][0] !== 0 ) {
+  //     console.log(mark);
+  //     console.log(mark.bbox.coordinates[0]);
+  //     c++;
+  //   }
+  // })
+  // console.log(c);
 
   console.log('Grabbing current indexes')
   var oldIndexes = await getCurrentIndexes();
