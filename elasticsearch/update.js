@@ -33,7 +33,8 @@ var cpi = require('./cpi');
 // }
 
 async function getBoxes() {
-  marks = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'crowd_source_example.json')));
+  // marks = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'crowd_source_example.json')));
+  marks = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'wine_search_entries.json')));
 }
 
 async function getCurrentIndexes() {
@@ -122,6 +123,13 @@ async function insertMarks(index) {
       
       if( !mark.vintage || mark.vintage < 1600 ) {
         delete mark.vintage;
+      }
+      
+      if( !mark.perprice || mark.perprice > 1000 ) {
+        delete mark.perprice;
+      }
+      if( !mark.caseprice || mark.caseprice > 1000 ) {
+        delete mark.caseprice;
       }
 
       for( var key in mark ) {
